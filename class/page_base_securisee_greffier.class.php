@@ -26,9 +26,17 @@ class page_base_securisee_greffier extends page_base {
 
 		parent::affiche_menu();
 		echo '
-		<li class="nav-item dropdown">
-			<a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-			Gestion Vote </a>
+		<li class="dropdown">
+			<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+				Gestion Votes
+				<b class="caret"></b>
+			</a>
+
+
+			<ul class="dropdown-menu">
+				<a class="nav-link"  href="'.$this->path.'/proposerVote" > Proposer un Vote <span class="sr-only">(current)</span></a></li>
+				<a class="nav-link"  href="'.$this->path.'/modifierVote" > Modifier un Vote <span class="sr-only">(current)</span></a></li>
+			</ul>
 		</li>
 		';
 

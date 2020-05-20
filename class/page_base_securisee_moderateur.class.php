@@ -12,7 +12,7 @@ class page_base_securisee_moderateur extends page_base {
 		}
 		else
 		{
-			if($_SESSION['type']!='1')
+			if($_SESSION['type']!='3')
 			{
 				echo '<script>document.location.href="Accueil"; </script>';
 			}
@@ -26,17 +26,53 @@ class page_base_securisee_moderateur extends page_base {
 
 		parent::affiche_menu();
 		echo '
-		<li class="nav-item dropdown">
-			<a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-			Gestion Article </a>
+		<li class="dropdown">
+			<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+				Gestion Textes de Loi
+				<b class="caret"></b>
+			</a>
 
-			<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-				<a class="dropdown-item" href="proposerArticle">Proposer un article</a>
-				<a class="dropdown-item" href="modifierArticle">Modifier un article</a>					
-				<a class="dropdown-item" href="validerArticle">Valider un article</a>
-			</div>
-			<a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-			Gestion Vote </a>
+			<ul class="dropdown-menu">
+				<a class="nav-link"  href="'.$this->path.'/proposerTexte" > Proposer un Texte <span class="sr-only">(current)</span></a></li>
+				<a class="nav-link"  href="'.$this->path.'/modifierTexte" > Modifier un Texte <span class="sr-only">(current)</span></a></li>
+			</ul>
+		</li>
+		
+		<li class="dropdown">
+			<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+				Gestion Articles
+				<b class="caret"></b>
+			</a>
+
+			<ul class="dropdown-menu">
+				<a class="nav-link"  href="'.$this->path.'/proposerArticle" > Proposer un Article <span class="sr-only">(current)</span></a></li>
+				<a class="nav-link"  href="'.$this->path.'/modifierArticle" > Modifier un Article <span class="sr-only">(current)</span></a></li>
+			</ul>
+		</li>
+
+		<li class="dropdown">
+			<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+				Gestion Amendements
+				<b class="caret"></b>
+			</a>
+
+			<ul class="dropdown-menu">
+				<a class="nav-link"  href="'.$this->path.'/proposerAmendement" > Proposer un Amendement <span class="sr-only">(current)</span></a></li>
+				<a class="nav-link"  href="'.$this->path.'/modifierAmendement" > Modifier un Amendement <span class="sr-only">(current)</span></a></li>
+			</ul>
+		</li>
+
+		<li class="dropdown">
+			<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+				Gestion Votes
+				<b class="caret"></b>
+			</a>
+
+
+			<ul class="dropdown-menu">
+				<a class="nav-link"  href="'.$this->path.'/proposerVote" > Proposer un Vote <span class="sr-only">(current)</span></a></li>
+				<a class="nav-link"  href="'.$this->path.'/modifierVote" > Modifier un Vote <span class="sr-only">(current)</span></a></li>
+			</ul>
 		</li>
 		';
 

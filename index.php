@@ -23,7 +23,6 @@
 			$site->right_sidebar=$controleur->retourne_monarque();
 			
 			$site->left_sidebar=$controleur->retourne_actualites();
-			$site->left_sidebar=$controleur->retourne_role_institution();
 			$site->affiche();
 			break;
 		case 'textesloi':
@@ -112,6 +111,11 @@
 				$site->left_sidebar=$controleur->retourne_modal_message();
 				$site->affiche();
 				break;
+		case 'vote':
+			$site->titre="Vote";
+
+			$site->left_sidebar=$controleur->retourne_stats_vote();
+			break;
 
 		case 'connexion' :
 			$site->titre='Connexion';
@@ -149,29 +153,30 @@
 	}
 
 	function connexsecurise() {
-	$retour;
-	if(!isset($_SESSION['id']) || !isset($_SESSION['type']))
-	{
-		$retour = new page_base();
+		$retour;
 
+		if(!isset($_SESSION['id']) || !isset($_SESSION['type']))
+		{
+			$retour = new page_base();
+
+		}
+		else
+		{
+			if($_SESSION['type']=='3')
+			{
+				$retour = new page_base_securisee_moderateur();
+			}
+			if($_SESSION['type']=='2')
+			{
+				$retour = new page_base_securisee_greffier();
+			}
+			if($_SESSION['type']=='1')
+			{
+				$retour = new page_base_securisee_secretaire();
+			}			
+		}
+		return $retour;	
 	}
-	else
-	{
-		if($_SESSION['type']=='3')
-		{
-			$retour = new page_base_securisee_moderateur();
-		}
-		if($_SESSION['type']=='2')
-		{
-			$retour = new page_base_securisee_greffier();
-		}
-		if($_SESSION['type']=='1')
-		{
-			$retour = new page_base_securisee_secretaire();
-		}
-	}
-	return $retour;
-}
 
 
 ?>

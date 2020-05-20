@@ -191,6 +191,7 @@ class controleur {
 		$retour='';
 		$retour = $retour.'<div class="nousConnaitre"> <h3> Nous Connaitre </h3>
 		<p> <b> L\'État de Cafonie</b> est un pays de 20 habitants et oui ça en fait du monde ! </p>
+		<img src="image/image_pays"/>
 		
 	    </div>';
         return $retour;
@@ -377,6 +378,27 @@ class controleur {
 				</form>';
 		return $retour;
 
+	}
+
+	public function retourne_stats_vote()
+	{
+		$retour = array();
+
+		$result = $this->vpdo->liste_vote_par_article();
+		 if ($result != false) {
+			 while ( $row = $result->fetch ( PDO::FETCH_OBJ ) )
+					{
+						$retour2 = array(
+							"code_art" => $row->code_seq_art,
+							"nbr_voix_pour" => $row->nbr_voix_pour,
+							"nbr_voix_contre" => $row->nbr_voix_contre
+						);
+						
+						array_push($retour,$retour2);
+					}
+		}
+
+		echo json_encode($retour);
 	}
 
 	public function genererMDP ($longueur = 8){

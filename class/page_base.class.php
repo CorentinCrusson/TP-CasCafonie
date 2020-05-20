@@ -160,8 +160,9 @@ class page_base {
 		else
 		{
 			echo '
-
-						<li class="nav-item"><a class="nav-link" href="'.$this->path.'/Deconnexion">Déconnexion</a></li>
+			</ul> <ul class="nav navbar-nav navbar-right">
+			<li class="nav-item"><a class="nav-link" href="'.$this->path.'/Deconnexion"><span class="glyphicon glyphicon-user"></span>Déconnexion</a></li>
+		
 					';
 		}
 	}

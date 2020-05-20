@@ -92,10 +92,10 @@ $(document).ready(function () {
             $x = data.message;
             $msg += $x;
           }
-          //hdModalRetour();
         }
         $("#ModalRetour").find("p").html($msg);
         $("#ModalRetour").modal();
+        hdModalRetour();
       });
       filterDataRequest.fail(function (jqXHR, textStatus) {
         if (jqXHR.status === 0) {
@@ -129,5 +129,5 @@ function hd() {
 
 function hdModalRetour() {
   $("#ModalRetour").modal("hide");
-  //document.location.href = "./Accueil";
+  document.location.href = "./Accueil";
 }

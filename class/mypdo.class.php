@@ -40,7 +40,7 @@ class mypdo extends PDO{
 
         	if ($result)
         	{
-        		return $result;
+				return $result;
         	}
         	return null;
 		}
@@ -72,6 +72,18 @@ class mypdo extends PDO{
 
 	public function liste_sujet_forum() {
 		$requete='SELECT id, auteur, titre, date_derniere_reponse FROM forum_sujets ORDER BY date_derniere_reponse DESC';
+
+      	$result=$this->connexion->query($requete);
+      	if ($result)
+      	{
+      		return $result;
+     	}
+      	return null;
+	}
+
+	public function liste_vote_par_article()
+	{
+		$requete='SELECT DISTINCT code_seq_art,nbr_voix_pour,nbr_voix_contre,jour_vote  FROM voter ORDER BY jour_vote';
 
       	$result=$this->connexion->query($requete);
       	if ($result)

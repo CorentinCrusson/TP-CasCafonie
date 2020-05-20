@@ -27,15 +27,15 @@
 			break;
 		case 'textesloi':
 			$site->titre='Textes de Loi';
-			$site->js='texteLoi';
+			$site->js='texteLoi/texteLoi';
 			
-			$site->left_sidebar=$controleur->retourne_texte_loi();
+			$site->left_sidebar=$controleur->retourne_textes_loi();
 			$site->affiche();
 			break;
 		
 		case 'amendements':
 			$site->titre='Amendements';
-			$site->js='amendements';
+			$site->js='amendement/amendements';
 				
 			$site->left_sidebar=$controleur->retourne_amendements();
 			$site->affiche();
@@ -51,6 +51,62 @@
 			$site->titre='Forum';
 
 			$site->left_sidebar=$controleur->retourne_sujet_forum();
+			$site->affiche();
+			break;
+
+		case 'proposertexte':
+			$site->titre='Création Texte';
+			$site->js='article/createTexteLoi';
+	
+			$site->js='jquery.validate.min';
+			$site->js='messages_fr';
+			$site->js='tooltipster.bundle.min';
+			$site->js='jquery-ui.min';
+			$site->js='datepicker-fr';
+			$site->js='jquery.dataTables.min';
+			$site->js='dataTables.bootstrap4.min';
+			$site->js='all';
+	
+			$site->css='dataTables.bootstrap4.min';
+			$site->css='jquery-ui.min';
+			$site->css='jquery-ui.theme.min';
+			$site->css='tooltipster.bundle.min';
+			$site->css='all';
+			$site->css='tooltipster-sideTip-Light.min';
+	
+			echo "<script src='js/ckeditor/ckeditor.js'></script>\n";
+	
+			$site->right_sidebar=$site->rempli_right_sidebar();
+			$site->left_sidebar=$controleur->retourne_formulaire_texte(['""','createtexte','Création Texte','Créer']);
+			$site->left_sidebar=$controleur->retourne_modal_message();
+			$site->affiche();
+			break;
+
+		case 'modifiertexte':
+			$site->titre='Modification Texte';
+			$site->js='texteLoi/modifTexteLoi';
+		
+			$site->js='jquery.validate.min';
+			$site->js='messages_fr';
+			$site->js='tooltipster.bundle.min';
+			$site->js='jquery-ui.min';
+			$site->js='datepicker-fr';
+			$site->js='jquery.dataTables.min';
+			$site->js='dataTables.bootstrap4.min';
+			$site->js='all';
+		
+			$site->css='dataTables.bootstrap4.min';
+			$site->css='jquery-ui.min';
+			$site->css='jquery-ui.theme.min';
+			$site->css='tooltipster.bundle.min';
+			$site->css='all';
+			$site->css='tooltipster-sideTip-Light.min';
+		
+			echo "<script src='js/ckeditor/ckeditor.js'></script>\n";
+		
+			$site->right_sidebar=$site->rempli_right_sidebar();
+			$site->left_sidebar=$controleur->retourne_formulaire_texte(['"display: none;"','modiftexte','Modification Texte','Modifier']);
+			$site->left_sidebar=$controleur->retourne_modal_message();
 			$site->affiche();
 			break;
 
@@ -83,7 +139,7 @@
 				break;
 	
 			case 'modifierarticle':
-				$site->titre='Modifier Article';
+				$site->titre='Modification Article';
 				$site->js='article/modifArticle';
 	
 				$site->js='jquery.validate.min';
@@ -106,11 +162,126 @@
 				echo "<script src='js/ckeditor/ckeditor.js'></script>\n";
 	
 				$site->right_sidebar=$site->rempli_right_sidebar();
-				$site->left_sidebar=$controleur->retourne_article_journaliste();
 				$site->left_sidebar=$controleur->retourne_formulaire_article(['"display: none;"','modifarticle','Modification Article','Modifier']);
 				$site->left_sidebar=$controleur->retourne_modal_message();
 				$site->affiche();
 				break;
+
+				case 'proposeramendement':
+					$site->titre='Création Amendement';
+					$site->js='amendement/createAmendement';
+		
+					$site->js='jquery.validate.min';
+					$site->js='messages_fr';
+					$site->js='tooltipster.bundle.min';
+					$site->js='jquery-ui.min';
+					$site->js='datepicker-fr';
+					$site->js='jquery.dataTables.min';
+					$site->js='dataTables.bootstrap4.min';
+					$site->js='all';
+		
+					$site->css='dataTables.bootstrap4.min';
+					$site->css='jquery-ui.min';
+					$site->css='jquery-ui.theme.min';
+					$site->css='tooltipster.bundle.min';
+					$site->css='all';
+					$site->css='tooltipster-sideTip-Light.min';
+		
+					echo "<script src='js/ckeditor/ckeditor.js'></script>\n";
+		
+					$site->right_sidebar=$site->rempli_right_sidebar();
+					$site->left_sidebar=$controleur->retourne_formulaire_amendement(['""','createamendement','Création Amendement','Créer']);
+					$site->left_sidebar=$controleur->retourne_modal_message();
+					$site->affiche();
+					break;
+		
+				case 'modifieramendement':
+					$site->titre='Modification Amendement';
+					$site->js='article/modifAmendement';
+		
+					$site->js='jquery.validate.min';
+					$site->js='messages_fr';
+					$site->js='tooltipster.bundle.min';
+					$site->js='jquery-ui.min';
+					$site->js='datepicker-fr';
+					$site->js='jquery.dataTables.min';
+					$site->js='dataTables.bootstrap4.min';
+					$site->js='all';
+		
+					$site->css='dataTables.bootstrap4.min';
+					$site->css='jquery-ui.min';
+					$site->css='jquery-ui.theme.min';
+					$site->css='tooltipster.bundle.min';
+					$site->css='all';
+					$site->css='tooltipster-sideTip-Light.min';
+					$site->css='fontawesome.min';
+		
+					echo "<script src='js/ckeditor/ckeditor.js'></script>\n";
+		
+					$site->right_sidebar=$site->rempli_right_sidebar();
+					$site->left_sidebar=$controleur->retourne_formulaire_amendement(['"display: none;"','modifamendement','Modification Amendement','Modifier']);
+					$site->left_sidebar=$controleur->retourne_modal_message();
+					$site->affiche();
+					break;
+
+					case 'proposervote':
+						$site->titre='Création Vote';
+						$site->js='vote/createVote';
+			
+						$site->js='jquery.validate.min';
+						$site->js='messages_fr';
+						$site->js='tooltipster.bundle.min';
+						$site->js='jquery-ui.min';
+						$site->js='datepicker-fr';
+						$site->js='jquery.dataTables.min';
+						$site->js='dataTables.bootstrap4.min';
+						$site->js='all';
+			
+						$site->css='dataTables.bootstrap4.min';
+						$site->css='jquery-ui.min';
+						$site->css='jquery-ui.theme.min';
+						$site->css='tooltipster.bundle.min';
+						$site->css='all';
+						$site->css='tooltipster-sideTip-Light.min';
+			
+						echo "<script src='js/ckeditor/ckeditor.js'></script>\n";
+			
+						$site->right_sidebar=$site->rempli_right_sidebar();
+						$site->left_sidebar=$controleur->retourne_formulaire_vote(['""','createvote','Création Vote','Créer']);
+						$site->left_sidebar=$controleur->retourne_modal_message();
+						$site->affiche();
+						break;
+			
+					case 'modifiervote':
+						$site->titre='Modification Vote';
+						$site->js='vote/modifVote';
+			
+						$site->js='jquery.validate.min';
+						$site->js='messages_fr';
+						$site->js='tooltipster.bundle.min';
+						$site->js='jquery-ui.min';
+						$site->js='datepicker-fr';
+						$site->js='jquery.dataTables.min';
+						$site->js='dataTables.bootstrap4.min';
+						$site->js='all';
+			
+						$site->css='dataTables.bootstrap4.min';
+						$site->css='jquery-ui.min';
+						$site->css='jquery-ui.theme.min';
+						$site->css='tooltipster.bundle.min';
+						$site->css='all';
+						$site->css='tooltipster-sideTip-Light.min';
+						$site->css='fontawesome.min';
+			
+						echo "<script src='js/ckeditor/ckeditor.js'></script>\n";
+			
+						$site->right_sidebar=$site->rempli_right_sidebar();
+						$site->left_sidebar=$controleur->retourne_formulaire_vote(['"display: none;"','modifvote','Modification Vote','Modifier']);
+						$site->left_sidebar=$controleur->retourne_modal_message();
+						$site->affiche();
+						break;
+	
+
 		case 'vote':
 			$site->titre="Vote";
 

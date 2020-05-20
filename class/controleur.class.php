@@ -23,16 +23,11 @@ class controleur {
 			}
 		}
 
-	/*public function retourne_test()
-	{
-		$tab = array();
-		$tab['id'] = 'corentincrusson@gmail.com';
-		$tab['mp'] = 'admin';
-		$tab['categ'] = 3;
-		$requete="SELECT * FROM utilisateur WHERE login='".$tab["id"]."' AND password='".MD5($tab["mp"])."' AND code_role_web=".$tab["categ"].";";
-		var_dump($requete);
-	}*/
+	/* ----------------------
+	--- Rubrique "Accueil" ---
+	------------------------ */
 
+	/* - Carousel - */
 	public function retourne_actualites()
 	{
 		$retour='';
@@ -78,6 +73,7 @@ class controleur {
         return $retour;
 	}
 
+	/* - Photo Monarque - */
 	public function retourne_monarque() {
 		$retour='';
 		$retour = $retour.'<div class="monarque border"> <h3> Le Monarque </h3>
@@ -90,7 +86,13 @@ class controleur {
         return $retour;
 	}
 
-	public function retourne_texte_loi() {
+	/*  -------------------------
+	--------- DATATABLES --------
+	--------------------------- */
+
+	/* - DataTable Textes Loi - */
+
+	public function retourne_textes_loi() {
 		$retour = '';
 	    $retour = $retour.'<div class="table-responsive">
 	    <table id="texteLoiTable" class="table table-striped table-bordered" cellspacing="0" >
@@ -120,34 +122,42 @@ class controleur {
         return $retour;
 	}
 
-	public function retourne_sujet_forum()
-	{
+	/* - DataTable Articles - */
+
+	public function retourne_articles() {
 		$retour = '';
-		$retour = $retour.'<div class="table-responsive"> <h3> Proposition des Internautes </h3> 
-		<table width="500" border="1">
-		<thead>
+	    $retour = $retour.'<div class="table-responsive">
+	    <table id="articleTable" class="table table-striped table-bordered" cellspacing="0" >
+            <thead>
             	<tr>
-            		<th>Auteur</th>
-            		<th>Titre</th>
-					<th>Date Dernière Reponse</th>
+            		<th>Numéro Amendement</th>
+					<th>Titre</th>					
+					<th> Titre Article </th>
+					<th>Date</th>
+					<th> </th>
             	</tr>  </thead> <tbody>';
-
-		$result = $this->vpdo->liste_sujet_forum();
-		if ($result != false) {
+		 $result = $this->vpdo->liste_amendements();
+		 if ($result != false) {
 			 while ( $row = $result->fetch ( PDO::FETCH_OBJ ) )
-			 {
-				$retour = $retour . '<tr>
-				<td>'.$row->auteur.'</td>
-				<td>'.$row->titre.'</td>
-				<td>'.$row->date.'</td>
-				</tr>';
-				 
+					{
+							$retour = $retour.'<tr>
+							<td>'.$row->code_seq_amend.'</td>
+							<td>'.$row->lib_amend.'</td>
+							<td>'.$row->date_amend.'</td>
+							<td>'.$row->titre_art.'</td>
+							</tr>';
+					}
 
-			//echo '<a href="./lire_sujet.php?id_sujet_a_lire=' , $data['id'] , '">' , htmlentities(trim($data['titre'])) , '</a>';
-			 }
+		} else {
+			$retour. '<tr class="odd">
+			<td valign="top" colspan="3" class="dataTables_empty">
+				Aucune donnée n\'a été importée
+			</td>
+			</tr>';
 		}
-		$retour = $retour . "</tbody></table></div></div>";
 	}
+
+	/* - DataTable Amendements - */
 
 	public function retourne_amendements() {
 		$retour = '';
@@ -187,6 +197,50 @@ class controleur {
         return $retour;
 	}
 
+	/* - DataTable Votes - */
+
+	public function retourne_votes() {
+		$retour = '';
+	    $retour = $retour.'<div class="table-responsive">
+	    <table id="voteTable" class="table table-striped table-bordered" cellspacing="0" >
+            <thead>
+            	<tr>
+            		<th>Numéro Amendement</th>
+					<th>Titre</th>					
+					<th> Titre Article </th>
+					<th>Date</th>
+					<th> </th>
+            	</tr>  </thead> <tbody>';
+		 $result = $this->vpdo->liste_amendements();
+		 if ($result != false) {
+			 while ( $row = $result->fetch ( PDO::FETCH_OBJ ) )
+					{
+							$retour = $retour.'<tr>
+							<td>'.$row->code_seq_amend.'</td>
+							<td>'.$row->lib_amend.'</td>
+							<td>'.$row->date_amend.'</td>
+							<td>'.$row->titre_art.'</td>
+							</tr>';
+					}
+
+		} else {
+			$retour. '<tr class="odd">
+			<td valign="top" colspan="3" class="dataTables_empty">
+				Aucune donnée n\'a été importée
+			</td>
+			</tr>';
+		}		
+
+		$retour = $retour.'</tbody>
+		</table>
+		</div>';
+        return $retour;
+	}
+
+	/* ------------------------------------
+	--- Rubrique " Nous Connaître " ---
+	------------------------------------ */
+
 	public function retourne_nousconnaitre() {
 		$retour='';
 		$retour = $retour.'<div class="nousConnaitre"> <h3> Nous Connaitre </h3>
@@ -196,6 +250,10 @@ class controleur {
 	    </div>';
         return $retour;
 	}
+
+	/* ------------------------------------
+	--- Rubrique " Espace Membre " ---
+	------------------------------------ */
 
 	public function retourne_formulaire_login() {
 		$retour = '
@@ -237,6 +295,10 @@ class controleur {
 				return $retour;
 	}
 
+	/* ------------------------------------------
+	--- Function pour retourner un Message Modal ---
+	-------------------------------------------- */
+
 	public function retourne_modal_message()
 	{
 		$retour='
@@ -264,121 +326,156 @@ class controleur {
 		return $retour;
 	}
 
+	/* ------------------------------------
+	---- Formulaires Créér / Modifier ----
+	------------------------------------ */
+
+	/* - Formulaire Texte de Loi - */
+
 	public function retourne_formulaire_texte($action)
 	{
 
 		$retour=  '
 		<form style='.$action[0].' role="form" id="'.$action[1].'" method="post"><h3>'.$action[2].'</h3>
-		<div class="form-group">
-		<label for="id"> Titre</label>
-		<input type="text" class="form-control" id="h3" name="h3" placeholder="Titre">
-		</div>
-		<div class="form-group">
-		<label for="date_deb"> Date Début</label>
-		<input type="text" class="form-control" id="date_deb" name="date_deb" placeholder="Date début">
-		</div>
-		<div class="form-group">
-		<label for="date_fin"> Date Fin</label>
-		<input type="text" class="form-control" id="date_fin" name="date_fin" placeholder="Date fin">
-		</div>
-				<div class="form-group">
-		<label for="corps"> Article</label>
+			<div class="form-group">
+				<label for="id"> Titre</label>
+				<input type="text" class="form-control" id="h3" name="h3" placeholder="Titre">
+			</div>
 
-				<textarea class="form-control" rows="5" id="corps" name="corps" placeholder="Corps article"></textarea>
-		</div>
-		<button type="submit" class="btn btn-success btn-default"><span class="fas fa-power-off"></span>'.$action[3].'</button>
-				<button type="button"" class="btn btn-danger btn-default pull-left" ><span class="fas fa-times"></span> Cancel</button>
-				</form>';
+			<button type="submit" class="btn btn-success btn-default"><span class="fas fa-power-off"></span>'.$action[3].'</button>
+			<button type="button" class="btn btn-danger btn-default pull-left" ><span class="fas fa-times"></span> Cancel</button>
+		</form>';
 		return $retour;
 
 	}
+
+	/* - Formulaire Articles - */
 
 	public function retourne_formulaire_article($action)
 	{
 
 		$retour=  '
 		<form style='.$action[0].' role="form" id="'.$action[1].'" method="post"><h3>'.$action[2].'</h3>
-		<div class="form-group">
-		<label for="id"> Titre</label>
-		<input type="text" class="form-control" id="h3" name="h3" placeholder="Titre">
-		</div>
-		<div class="form-group">
-		<label for="date_deb"> Date Début</label>
-		<input type="text" class="form-control" id="date_deb" name="date_deb" placeholder="Date début">
-		</div>
-		<div class="form-group">
-		<label for="date_fin"> Date Fin</label>
-		<input type="text" class="form-control" id="date_fin" name="date_fin" placeholder="Date fin">
-		</div>
-				<div class="form-group">
-		<label for="corps"> Article</label>
-
+			<div class="form-group">
+				<label for="id"> Titre</label>
+				<input type="text" class="form-control" id="h3" name="h3" placeholder="Titre">
+			</div>
+			<div class="form-group">
+				<label for="corps"> Article </label>
 				<textarea class="form-control" rows="5" id="corps" name="corps" placeholder="Corps article"></textarea>
-		</div>
-		<button type="submit" class="btn btn-success btn-default"><span class="fas fa-power-off"></span>'.$action[3].'</button>
-				<button type="button"" class="btn btn-danger btn-default pull-left" ><span class="fas fa-times"></span> Cancel</button>
-				</form>';
+			</div>
+			<div class="form-group">
+				<label for="idRef"> Référence </label>
+				<SELECT id="liste_txt" onChange="" >
+				'.$this->affiche_combo_texte().'
+				</SELECT>
+			</div>
+
+			<button type="submit" class="btn btn-success btn-default"><span class="fas fa-power-off"></span>'.$action[3].'</button>
+			<button type="button"" class="btn btn-danger btn-default pull-left" ><span class="fas fa-times"></span> Cancel</button>
+		</form>';
 		return $retour;
 
 	}
+
+	/* - Formulaire Amendements - */
 
 	public function retourne_formulaire_amendement($action)
 	{
 
 		$retour=  '
 		<form style='.$action[0].' role="form" id="'.$action[1].'" method="post"><h3>'.$action[2].'</h3>
-		<div class="form-group">
-		<label for="id"> Titre</label>
-		<input type="text" class="form-control" id="h3" name="h3" placeholder="Titre">
-		</div>
-		<div class="form-group">
-		<label for="date_deb"> Date Début</label>
-		<input type="text" class="form-control" id="date_deb" name="date_deb" placeholder="Date début">
-		</div>
-		<div class="form-group">
-		<label for="date_fin"> Date Fin</label>
-		<input type="text" class="form-control" id="date_fin" name="date_fin" placeholder="Date fin">
-		</div>
-				<div class="form-group">
-		<label for="corps"> Article</label>
+			<div class="form-group">
+				<label for="id"> Libellé </label>
+				<input type="text" class="form-control" id="h3" name="h3" placeholder="Libellé">
+			</div>
+			<div class="form-group">
+				<label for="corps"> Amendement </label>
+				<textarea class="form-control" rows="5" id="corps" name="corps" placeholder="Corps Amendement"></textarea>
+			</div>
+			<div class="form-group">
+				<label for="dateAmend"> Date Amendement </label>
+				<input type="text" class="form-control" id="date_amend" name="date_amend" placeholder="Date Amendement">
+			</div>
+			<div class="form-group">
+				<label for="idRef"> Référence </label>
+				<SELECT id="liste_txt" onChange="js_change_texte()" >
+				'.$this->affiche_combo_texte().'
+				</SELECT>
+				'.$this->affiche_combo_article().'
+			</div>
 
-				<textarea class="form-control" rows="5" id="corps" name="corps" placeholder="Corps article"></textarea>
-		</div>
-		<button type="submit" class="btn btn-success btn-default"><span class="fas fa-power-off"></span>'.$action[3].'</button>
-				<button type="button"" class="btn btn-danger btn-default pull-left" ><span class="fas fa-times"></span> Cancel</button>
-				</form>';
+			<button type="submit" class="btn btn-success btn-default"><span class="fas fa-power-off"></span>'.$action[3].'</button>
+			<button type="button"" class="btn btn-danger btn-default pull-left" ><span class="fas fa-times"></span> Cancel</button>
+		</form>';
 		return $retour;
 
 	}
+
+	/* - Formulaire Votes - */
 
 	public function retourne_formulaire_vote($action)
 	{
 
 		$retour=  '
 		<form style='.$action[0].' role="form" id="'.$action[1].'" method="post"><h3>'.$action[2].'</h3>
-		<div class="form-group">
-		<label for="id"> Titre</label>
-		<input type="text" class="form-control" id="h3" name="h3" placeholder="Titre">
-		</div>
-		<div class="form-group">
-		<label for="date_deb"> Date Début</label>
-		<input type="text" class="form-control" id="date_deb" name="date_deb" placeholder="Date début">
-		</div>
-		<div class="form-group">
-		<label for="date_fin"> Date Fin</label>
-		<input type="text" class="form-control" id="date_fin" name="date_fin" placeholder="Date fin">
-		</div>
-				<div class="form-group">
-		<label for="corps"> Article</label>
-
+			<div class="form-group">
+				<label for="id"> Titre</label>
+				<input type="text" class="form-control" id="h3" name="h3" placeholder="Titre">
+			</div>
+			<div class="form-group">
+				<label for="corps"> Article </label>
 				<textarea class="form-control" rows="5" id="corps" name="corps" placeholder="Corps article"></textarea>
-		</div>
-		<button type="submit" class="btn btn-success btn-default"><span class="fas fa-power-off"></span>'.$action[3].'</button>
-				<button type="button"" class="btn btn-danger btn-default pull-left" ><span class="fas fa-times"></span> Cancel</button>
-				</form>';
+			</div>
+			<div class="form-group">
+				<label for="idRef"> Référence </label>
+				<SELECT id="liste_txt" onChange="js_change_texte()" >
+				'.$this->affiche_combo_texte().'
+				</SELECT>
+				'.$this->affiche_combo_article().'
+			</div>
+
+			<button type="submit" class="btn btn-success btn-default"><span class="fas fa-power-off"></span>'.$action[3].'</button>
+			<button type="button"" class="btn btn-danger btn-default pull-left" ><span class="fas fa-times"></span> Cancel</button>
+		</form>';
 		return $retour;
 
 	}
+
+	/* -------------------------------------------
+	-------------- COMBO BOX ----------------------
+	--------------------------------------------- */
+
+	/* - Combo Box Texte - */
+	public function affiche_combo_texte(){
+
+		$retour = '';
+
+		//Combo Box Departement
+		$result = $this->vpdo->liste_texte_loi();
+		if ($result != false) {
+			while ( $row = $result->fetch ( PDO::FETCH_OBJ ) )
+				 {
+						 $retour = $retour."<OPTION value='$row->code_txt'>$row->titre_txt</OPTION>";
+				}
+
+		}
+		
+		return $retour;
+	}
+
+	/* - Combo Box Article - */
+	public function affiche_combo_article(){
+
+		$retour = '<SELECT id="liste_art" style="display: none" onChange="js_change_art()" >';
+
+		$retour = $retour.'</SELECT>';
+		return $retour;
+	}
+
+	/* -------------------------------------------
+	--- Rubrique Caché " Vote " renvoyant du Json ---
+	--------------------------------------------- */
 
 	public function retourne_stats_vote()
 	{
@@ -400,6 +497,8 @@ class controleur {
 
 		echo json_encode($retour);
 	}
+
+	/* - Génération de Mot de Passe - */
 
 	public function genererMDP ($longueur = 8){
 		// initialiser la variable $mdp

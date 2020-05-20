@@ -1,22 +1,33 @@
 /* Variables */
 var myselectTexte;
+var myselectArticle;
 
 function hdModalRetour() {
   $("#ModalRetour").modal("hide");
 }
 
 $(document).ready(function () {
+  $.datepicker.setDefaults($.datepicker.regional["fr"]);
+
+  $("#date_amend").datepicker(
+    { changeYear: true, dateFormat: "yy-mm-dd" },
+    "setDate",
+    $("#date_amend").val()
+  );
   CKEDITOR.replace("corps");
 
-  $("#createarticle").submit(function (e) {
+  $("#createamendement").submit(function (e) {
     myselectTexte = document.getElementById("liste_txt");
+    myselectArticle = document.getElementById("liste_art");
     e.preventDefault();
-    var $url = "./ajax/valide_create_article.php";
+    var $url = "./ajax/valide_create_amendement.php";
 
     var formData = {
       titre: $("#h3").val(),
       corps: CKEDITOR.instances.corps.getData(),
+      date_amend: $("#date_amend").val(),
       id_txt: myselectTexte,
+      id_art: myselectArticle,
     };
 
     var filterDataRequest = $.ajax({

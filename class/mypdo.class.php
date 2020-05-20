@@ -30,7 +30,9 @@ class mypdo extends PDO{
     				break;
     			}
     	}
-    }
+	}
+	
+	/* - Connexion Utilisateur ( Espace Membre ) */
 
     public function connect($tab)
         {
@@ -44,6 +46,13 @@ class mypdo extends PDO{
         	}
         	return null;
 		}
+
+	/* - Texte de Loi - */
+
+	public function create_texte()
+	{
+		return 0;
+	}
 		
 	public function liste_texte_loi() {
 		$requete='select t.id,t.titre_txt,t.vote_final_txt FROM texte t';
@@ -55,6 +64,32 @@ class mypdo extends PDO{
       		return $result;
      	}
 		  return null;
+	}	
+
+	/* - Articles - */	
+
+	public function create_article()
+	{
+		return 0;
+	}
+
+	public function trouve_toutes_les_articles_via_un_texte($id)
+	{
+		$requete= 'SELECT code_seq_art, texte_art FROM article WHERE code_txt = "'.$id.'"';
+
+		$result=$this->connexion->query($requete);
+		if ($result)
+		{
+			return ($result);
+		}
+		return null;
+	}
+
+	/* - Amendements - */
+
+	public function create_amendement()
+	{
+		return 0;
 	}
 
 	public function liste_amendements() {
@@ -70,17 +105,13 @@ class mypdo extends PDO{
       	return null;
 	}
 
-	public function liste_sujet_forum() {
-		$requete='SELECT id, auteur, titre, date_derniere_reponse FROM forum_sujets ORDER BY date_derniere_reponse DESC';
+	/* - Votes - */
 
-      	$result=$this->connexion->query($requete);
-      	if ($result)
-      	{
-      		return $result;
-     	}
-      	return null;
+	public function create_vote()
+	{
+		return 0;
 	}
-
+	
 	public function liste_vote_par_article()
 	{
 		$requete='SELECT DISTINCT code_seq_art,nbr_voix_pour,nbr_voix_contre,jour_vote  FROM voter ORDER BY jour_vote';
@@ -92,6 +123,20 @@ class mypdo extends PDO{
      	}
       	return null;
 	}
+
+	/* - Forum - */
+
+	public function liste_sujet_forum() {
+		$requete='SELECT id, auteur, titre, date_derniere_reponse FROM forum_sujets ORDER BY date_derniere_reponse DESC';
+
+      	$result=$this->connexion->query($requete);
+      	if ($result)
+      	{
+      		return $result;
+     	}
+      	return null;
+	}
+
 
 }
 ?>

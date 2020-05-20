@@ -1,3 +1,3 @@
 $(document).ready(function () {
-  $("#texteLoiTable").dataTable();
+  $("#articleTable").dataTable();
 });

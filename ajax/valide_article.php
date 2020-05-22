@@ -13,8 +13,10 @@ $mypdo=new mypdo();
 
 
 $tab['titre']=$_POST['titre'];
-$tab['id_insti']=$_POST['id_insti'];
+$tab['corps']=$_POST['corps'];
+$tab['id_txt']=$_POST['id_txt'];
 
-$data=$mypdo->create_texte($tab);
+
+$data=$mypdo->modif_article($tab);
 echo json_encode($data);
 ?>

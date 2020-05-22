@@ -37,25 +37,54 @@ class mypdo extends PDO{
     public function connect($tab)
         {
 			$tab["id"] = str_replace("%40","@",$tab["id"]);
-        	$requete="SELECT TOP 1 * FROM utilisateur WHERE login='".$tab["id"]."' AND password='".MD5($tab["mp"])."' AND code_role_web=".$tab["categ"].";";
+			$tab['mp'] = md5($tab['mp']);
+
+        	$requete='SELECT * FROM utilisateur WHERE login='.$this->connexion->quote($tab['id']) .' AND password='.$this->connexion->quote($tab['mp']).' AND code_role_web='.$this->connexion->quote($tab['categ']).';';
 			$result=$this->connexion->query($requete);
 
         	if ($result)
         	{
-				return $result;
+				if($result->fetchColumn()==1)
+				{
+					return $result;
+				}
         	}
         	return null;
 		}
 
 	/* - Texte de Loi - */
 
-	public function create_texte()
+	public function create_texte($tab)
 	{
-		return 0;
+		$errors         = array();
+	    $data 			= array();
+	  
+        $requete='INSERT into texte(titre_txt,code_insti) values('
+		.$this->connexion ->quote($tab['titre']) .','
+		.$this->connexion ->quote($tab['id_insti']).'
+		);';
+
+       $nblignes=$this->connexion -> exec($requete);
+      if ($nblignes !=1)
+      {
+        $errors['requete']='Pas de insert de Texte :'.$requete;
+      }
+
+
+
+      if ( ! empty($errors)) {
+        $data['success'] = false;
+        $data['errors']  = $errors;
+      } else {
+
+        $data['success'] = true;
+        $data['message'] = 'Création Texte ok!';
+      }
+      return $data;
 	}
 		
 	public function liste_texte_loi() {
-		$requete='select t.id,t.titre_txt,t.vote_final_txt FROM texte t';
+		$requete='SELECT code_txt,titre_txt,vote_final_txt,promulgation_txt FROM texte';
 
       	$result=$this->connexion->query($requete);
       	if ($result)
@@ -63,19 +92,59 @@ class mypdo extends PDO{
 
       		return $result;
      	}
-		  return null;
+		
+		 return null;
 	}	
 
 	/* - Articles - */	
 
-	public function create_article()
+	public function create_article($tab)
 	{
-		return 0;
+	  $errors         = array();
+      $data 			= array();
+      $corps=utf8_encode($tab['corps']);
+        $requete='INSERT into article(code_txt,titre_art,texte_art) values('
+        .$this->connexion ->quote($tab['id_txt']) .','
+        .$this->connexion ->quote($tab['titre']) .','
+		.$this->connexion ->quote($corps) .'
+		);';
+
+       $nblignes=$this->connexion -> exec($requete);
+      if ($nblignes !=1)
+      {
+        $errors['requete']='Pas de insert d\'article :'.$requete;
+      }
+
+
+
+      if ( ! empty($errors)) {
+        $data['success'] = false;
+        $data['errors']  = $errors;
+      } else {
+
+        $data['success'] = true;
+        $data['message'] = 'Création article ok!';
+      }
+      return $data;
+	}
+
+	public function liste_articles()
+	{
+		$requete='SELECT a.code_seq_art, a.titre_art, t.titre_txt FROM article a, texte t WHERE a.code_txt = t.code_txt';
+
+      	$result=$this->connexion->query($requete);
+      	if ($result)
+      	{
+
+      		return $result;
+     	}
+		
+		 return null;
 	}
 
 	public function trouve_toutes_les_articles_via_un_texte($id)
 	{
-		$requete= 'SELECT code_seq_art, texte_art FROM article WHERE code_txt = "'.$id.'"';
+		$requete= 'SELECT code_seq_art, titre_art FROM article WHERE code_txt = '.$id;
 
 		$result=$this->connexion->query($requete);
 		if ($result)
@@ -87,13 +156,40 @@ class mypdo extends PDO{
 
 	/* - Amendements - */
 
-	public function create_amendement()
+	public function create_amendement($tab)
 	{
-		return 0;
+		$errors         = array();
+		$data 			= array();
+		$corps=utf8_encode($tab['corps']);
+			$requete='INSERT into amendement(code_txt,code_seq_art,lib_amend,texte_amend,date_amend) values('
+			.$this->connexion ->quote($tab['id_txt']) .','
+			.$this->connexion ->quote($tab['id_art']) .','
+			.$this->connexion ->quote($tab['titre']) .','
+			.$this->connexion ->quote($corps) .','
+			.$this->connexion ->quote($tab['date_amend']) .'
+			);';
+
+		$nblignes=$this->connexion -> exec($requete);
+		if ($nblignes !=1)
+		{
+			$errors['requete']='Pas de insert d\'amendement :'.$requete;
+		}
+
+
+
+		if ( ! empty($errors)) {
+			$data['success'] = false;
+			$data['errors']  = $errors;
+		} else {
+
+			$data['success'] = true;
+			$data['message'] = 'Création Amendement ok!';
+		}
+		return $data;
 	}
 
 	public function liste_amendements() {
-		$requete='select am.code_seq_amend,am.lib_amend,am.date_amend,a.titre_art FROM amendement am,article a 
+		$requete='SELECT am.code_seq_amend,am.lib_amend,am.date_amend,a.titre_art FROM amendement am,article a 
 		WHERE am.code_seq_art = a.code_seq_art';
 
       	$result=$this->connexion->query($requete);
@@ -107,9 +203,75 @@ class mypdo extends PDO{
 
 	/* - Votes - */
 
-	public function create_vote()
+	public function create_vote($tab)
 	{
-		return 0;
+		$errors         = array();
+		$data 			= array();
+		$dateOk = true;
+
+		/* -- On vérifie d'abord si la date donnée existe -- */
+		$requete = 'SELECT * from date where jour_vote='.$tab['jour_vote'];
+		$nblignes=$this->connexion->exec($requete);
+		if ($nblignes != 1)
+		{	
+			/* -- Si NON on insert d'abord la date -- */
+			$requete='INSERT INTO date(jour_vote) VALUES ('
+				.$this->connexion->quote($tab['jour_vote']).'
+				);';
+
+			$nblignes=$this->connexion->exec($requete);
+			if ($nblignes !=1)
+			{
+				$dateOk= false;
+				$errors['requete']='Pas de insert de Date :'.$requete;
+			}
+		}
+
+		if($dateOk)
+		{
+			/* -- On insert après si date OK -- */
+			$requete='INSERT into voter(code_organe,jour_vote,code_txt,code_seq_art,nbr_voix_pour,nbr_voix_contre) values('
+			.$this->connexion ->quote($tab['id_org']) .','
+			.$this->connexion ->quote($tab['jour_vote']) .','
+			.$this->connexion ->quote($tab['id_txt']) .','
+			.$this->connexion ->quote($tab['id_art']) .','
+			.$this->connexion ->quote($tab['nbr_voix_pour']) .','
+			.$this->connexion ->quote($tab['nbr_voix_contre']) .'
+			);';
+
+			$nblignes=$this->connexion -> exec($requete);
+			if ($nblignes !=1)
+			{
+				$errors['requete']='Pas de insert de Vote :'.$requete;
+			}
+		}
+
+
+
+		if ( ! empty($errors)) {
+			$data['success'] = false;
+			$data['errors']  = $errors;
+		} else {
+
+			$data['success'] = true;
+			$data['message'] = 'Création Vote ok!';
+		}
+		return $data;
+	}
+
+	public function liste_votes()
+	{
+		$requete='SELECT t.titre_txt,a.titre_art,v.jour_vote,o.lib_organe,v.nbr_voix_pour,v.nbr_voix_contre FROM voter v, texte t, article a,organes o
+		WHERE t.code_txt = v.code_txt AND a.code_seq_art = v.code_seq_art AND o.code_organe = v.code_organe';
+
+      	$result=$this->connexion->query($requete);
+      	if ($result)
+      	{
+
+      		return $result;
+     	}
+		
+		 return null;
 	}
 	
 	public function liste_vote_par_article()
@@ -119,6 +281,34 @@ class mypdo extends PDO{
       	$result=$this->connexion->query($requete);
       	if ($result)
       	{
+      		return $result;
+     	}
+      	return null;
+	}
+
+	/* - Organes - */
+	public function liste_organes()
+	{
+		$requete='SELECT code_organe,lib_organe FROM organes';
+
+      	$result=$this->connexion->query($requete);
+      	if ($result)
+      	{
+
+      		return $result;
+     	}
+      	return null;
+	}
+
+	/* - Institutions - */
+	public function liste_institutions()
+	{
+		$requete='SELECT code_insti,nom_insti FROM institution';
+
+      	$result=$this->connexion->query($requete);
+      	if ($result)
+      	{
+
       		return $result;
      	}
       	return null;

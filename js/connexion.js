@@ -1,3 +1,16 @@
+function hd() {
+  var instances = $.tooltipster.instances();
+  $.each(instances, function (i, instance) {
+    instance.close();
+  });
+
+  $("#myModal").modal("hide");
+}
+
+function hdModalRetour() {
+  $("#ModalRetour").modal("hide");
+}
+
 $(document).ready(function () {
   $("#myModal").modal();
 
@@ -117,17 +130,3 @@ $(document).ready(function () {
     }
   });
 });
-
-function hd() {
-  var instances = $.tooltipster.instances();
-  $.each(instances, function (i, instance) {
-    instance.close();
-  });
-
-  $("#myModal").modal("hide");
-}
-
-function hdModalRetour() {
-  $("#ModalRetour").modal("hide");
-  document.location.href = "./Accueil";
-}

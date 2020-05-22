@@ -5,10 +5,14 @@ function hdModalRetour() {
 $(document).ready(function () {
   $("#createtexte").submit(function (e) {
     e.preventDefault();
+
+    var myselectInsti = document.getElementById("liste_insti");
+
     var $url = "./ajax/valide_create_texte.php";
 
     var formData = {
       titre: $("#h3").val(),
+      id_insti: myselectInsti.options[myselectInsti.selectedIndex].value,
     };
 
     var filterDataRequest = $.ajax({

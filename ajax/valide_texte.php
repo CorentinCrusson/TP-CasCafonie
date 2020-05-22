@@ -15,6 +15,6 @@ $mypdo=new mypdo();
 $tab['titre']=$_POST['titre'];
 $tab['id_insti']=$_POST['id_insti'];
 
-$data=$mypdo->create_texte($tab);
+$data=$mypdo->modif_texte($tab);
 echo json_encode($data);
 ?>

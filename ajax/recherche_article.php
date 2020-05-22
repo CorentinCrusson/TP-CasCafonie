@@ -11,7 +11,7 @@ if(isset($_POST['id_txt']))
 		// résultats
 		while($donnees = $resultat->fetch(PDO::FETCH_OBJ)) {
 			// je remplis un tableau et mettant le nom de la ville en index pour garder le tri
-			$data[$donnees->code_seq_art][] = ($donnees->titre_art);
+			$data[$donnees->titre_art][] = ($donnees->code_seq_art);
 		}
 	}
 }

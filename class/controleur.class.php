@@ -27,6 +27,15 @@ class controleur {
 	--- Rubrique "Accueil" ---
 	------------------------ */
 
+	public function retourne_test() {
+		$tab;
+		$tab['id'] = 'corentincrusson@gmail.com';
+		$tab['mp'] = 'admin';
+		$tab['categ'] = '3';
+		$result = $this->vpdo->connect($tab);
+		var_dump($result);
+	}
+
 	/* - Carousel - */
 	public function retourne_actualites()
 	{
@@ -99,8 +108,9 @@ class controleur {
             <thead>
             	<tr>
             		<th>Numéro Texte</th>
-            		<th>Titre</th>
-					<th>Vote</th>
+					<th>Titre</th>
+					<th> Voté </th>
+					<th> Promulgé </th>
 					<th> </th>
             	</tr>  </thead> <tbody>';
 		 $result = $this->vpdo->liste_texte_loi();
@@ -130,21 +140,19 @@ class controleur {
 	    <table id="articleTable" class="table table-striped table-bordered" cellspacing="0" >
             <thead>
             	<tr>
-            		<th>Numéro Amendement</th>
-					<th>Titre</th>					
-					<th> Titre Article </th>
-					<th>Date</th>
+            		<th>Numéro Article</th>
+					<th>Titre</th>				
+					<th> Titre Texte Référent </th>
 					<th> </th>
             	</tr>  </thead> <tbody>';
-		 $result = $this->vpdo->liste_amendements();
+		 $result = $this->vpdo->liste_articles();
 		 if ($result != false) {
 			 while ( $row = $result->fetch ( PDO::FETCH_OBJ ) )
 					{
 							$retour = $retour.'<tr>
-							<td>'.$row->code_seq_amend.'</td>
-							<td>'.$row->lib_amend.'</td>
-							<td>'.$row->date_amend.'</td>
+							<td>'.$row->code_seq_art.'</td>
 							<td>'.$row->titre_art.'</td>
+							<td>'.$row->titre_txt.'</td>
 							</tr>';
 					}
 
@@ -155,6 +163,11 @@ class controleur {
 			</td>
 			</tr>';
 		}
+
+		$retour = $retour.'</tbody>
+		</table>
+		</div>';
+        return $retour;
 	}
 
 	/* - DataTable Amendements - */
@@ -166,8 +179,8 @@ class controleur {
             <thead>
             	<tr>
             		<th>Numéro Amendement</th>
-					<th>Titre</th>					
-					<th> Titre Article </th>
+					<th> Titre</th>					
+					<th> Titre Article Référent </th>
 					<th>Date</th>
 					<th> </th>
             	</tr>  </thead> <tbody>';
@@ -178,8 +191,9 @@ class controleur {
 							$retour = $retour.'<tr>
 							<td>'.$row->code_seq_amend.'</td>
 							<td>'.$row->lib_amend.'</td>
-							<td>'.$row->date_amend.'</td>
 							<td>'.$row->titre_art.'</td>
+							<td>'.$row->date_amend.'</td>
+
 							</tr>';
 					}
 
@@ -205,21 +219,25 @@ class controleur {
 	    <table id="voteTable" class="table table-striped table-bordered" cellspacing="0" >
             <thead>
             	<tr>
-            		<th>Numéro Amendement</th>
-					<th>Titre</th>					
-					<th> Titre Article </th>
-					<th>Date</th>
+            		<th>Titre Texte </th>
+					<th>Titre Article </th>	
+					<th> Date Vote </th>
+					<th> Organe Votant </th>
+					<th> Nombre Voix Pour </th>
+					<th> Nombre Voix Contre </th>
 					<th> </th>
             	</tr>  </thead> <tbody>';
-		 $result = $this->vpdo->liste_amendements();
+		 $result = $this->vpdo->liste_votes();
 		 if ($result != false) {
 			 while ( $row = $result->fetch ( PDO::FETCH_OBJ ) )
 					{
 							$retour = $retour.'<tr>
-							<td>'.$row->code_seq_amend.'</td>
-							<td>'.$row->lib_amend.'</td>
-							<td>'.$row->date_amend.'</td>
+							<td>'.$row->titre_txt.'</td>
 							<td>'.$row->titre_art.'</td>
+							<td>'.$row->jour_vote.'</td>
+							<td>'.$row->lib_organe.'</td>
+							<td>'.$row->nbr_voix_pour.'</td>
+							<td>'.$row->nbr_voix_contre.'</td>
 							</tr>';
 					}
 
@@ -341,6 +359,12 @@ class controleur {
 				<label for="id"> Titre</label>
 				<input type="text" class="form-control" id="h3" name="h3" placeholder="Titre">
 			</div>
+			<div class="form-group">
+				<label for="idInsti"> Référence Institution </label>
+				<SELECT id="liste_insti">
+				'.$this->affiche_combo_insti().'
+				</SELECT>
+			</div>
 
 			<button type="submit" class="btn btn-success btn-default"><span class="fas fa-power-off"></span>'.$action[3].'</button>
 			<button type="button" class="btn btn-danger btn-default pull-left" ><span class="fas fa-times"></span> Cancel</button>
@@ -358,15 +382,15 @@ class controleur {
 		<form style='.$action[0].' role="form" id="'.$action[1].'" method="post"><h3>'.$action[2].'</h3>
 			<div class="form-group">
 				<label for="id"> Titre</label>
-				<input type="text" class="form-control" id="h3" name="h3" placeholder="Titre">
+				<input type="text" class="form-control" id="h3" name="h3" placeholder="Titre" required>
 			</div>
 			<div class="form-group">
 				<label for="corps"> Article </label>
-				<textarea class="form-control" rows="5" id="corps" name="corps" placeholder="Corps article"></textarea>
+				<textarea class="form-control" rows="5" id="corps" name="corps" placeholder="Corps article" required></textarea>
 			</div>
 			<div class="form-group">
 				<label for="idRef"> Référence </label>
-				<SELECT id="liste_txt" onChange="" >
+				<SELECT id="liste_txt" onChange="" required>
 				'.$this->affiche_combo_texte().'
 				</SELECT>
 			</div>
@@ -399,7 +423,7 @@ class controleur {
 			</div>
 			<div class="form-group">
 				<label for="idRef"> Référence </label>
-				<SELECT id="liste_txt" onChange="js_change_texte()" >
+				<SELECT id="liste_txt" onChange="js_change_texte()" required>
 				'.$this->affiche_combo_texte().'
 				</SELECT>
 				'.$this->affiche_combo_article().'
@@ -419,20 +443,31 @@ class controleur {
 
 		$retour=  '
 		<form style='.$action[0].' role="form" id="'.$action[1].'" method="post"><h3>'.$action[2].'</h3>
-			<div class="form-group">
-				<label for="id"> Titre</label>
-				<input type="text" class="form-control" id="h3" name="h3" placeholder="Titre">
-			</div>
-			<div class="form-group">
-				<label for="corps"> Article </label>
-				<textarea class="form-control" rows="5" id="corps" name="corps" placeholder="Corps article"></textarea>
-			</div>
+			
 			<div class="form-group">
 				<label for="idRef"> Référence </label>
-				<SELECT id="liste_txt" onChange="js_change_texte()" >
+				<SELECT id="liste_txt" onChange="js_change_texte()" required>
 				'.$this->affiche_combo_texte().'
 				</SELECT>
 				'.$this->affiche_combo_article().'
+			</div>
+			<div class="form-group">
+				<label for="idOrg"> Organe Votant </label>
+				<SELECT id="liste_org" required>
+				'.$this->affiche_combo_organe().'
+				</SELECT>
+			</div>
+			<div class="form-group">
+				<label for="id"> Nombre Voix Pour </label>
+				<input type="number" class="form-control" id="nbr_voix_pour" name="nbr_voix_pour" min="0" max="500" placeholder="0" required>
+			</div>
+			<div class="form-group">
+				<label for="id"> Nombre Voix Contre </label>
+				<input type="number" class="form-control" id="nbr_voix_contre" name="nbr_voix_contre" min="0" max="500" placeholder="0" required>
+			</div>
+			<div class="form-group">
+				<label for="dateVote"> Date du Vote </label>
+				<input type="text" class="form-control" id="jour_vote" name="jour_vote" placeholder="Date du Vote">
 			</div>
 
 			<button type="submit" class="btn btn-success btn-default"><span class="fas fa-power-off"></span>'.$action[3].'</button>
@@ -454,6 +489,7 @@ class controleur {
 		//Combo Box Departement
 		$result = $this->vpdo->liste_texte_loi();
 		if ($result != false) {
+			$retour = $retour.'<option value=""> Choisir Ici</option>';
 			while ( $row = $result->fetch ( PDO::FETCH_OBJ ) )
 				 {
 						 $retour = $retour."<OPTION value='$row->code_txt'>$row->titre_txt</OPTION>";
@@ -470,6 +506,42 @@ class controleur {
 		$retour = '<SELECT id="liste_art" style="display: none" onChange="js_change_art()" >';
 
 		$retour = $retour.'</SELECT>';
+		return $retour;
+	}
+
+	/* - Combo Box Organe - */
+	public function affiche_combo_organe(){
+
+		$retour = '';
+
+		//Combo Box Departement
+		$result = $this->vpdo->liste_organes();
+		if ($result != false) {
+			while ( $row = $result->fetch ( PDO::FETCH_OBJ ) )
+				 {
+						 $retour = $retour."<OPTION value='$row->code_organe'>$row->lib_organe</OPTION>";
+				}
+
+		}
+		
+		return $retour;
+	}
+
+	/* - Combo Box Institution - */
+	public function affiche_combo_insti(){
+
+		$retour = '';
+
+		//Combo Box Departement
+		$result = $this->vpdo->liste_institutions();
+		if ($result != false) {
+			while ( $row = $result->fetch ( PDO::FETCH_OBJ ) )
+				 {
+						 $retour = $retour."<OPTION value='$row->code_insti'>$row->nom_insti</OPTION>";
+				}
+
+		}
+		
 		return $retour;
 	}
 

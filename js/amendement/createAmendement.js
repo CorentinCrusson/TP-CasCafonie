@@ -1,7 +1,3 @@
-/* Variables */
-var myselectTexte;
-var myselectArticle;
-
 function hdModalRetour() {
   $("#ModalRetour").modal("hide");
 }
@@ -17,17 +13,18 @@ $(document).ready(function () {
   CKEDITOR.replace("corps");
 
   $("#createamendement").submit(function (e) {
-    myselectTexte = document.getElementById("liste_txt");
-    myselectArticle = document.getElementById("liste_art");
     e.preventDefault();
+
+    var myselectTexte = document.getElementById("liste_txt");
+    var myselectArticle = document.getElementById("liste_art");
     var $url = "./ajax/valide_create_amendement.php";
 
     var formData = {
       titre: $("#h3").val(),
       corps: CKEDITOR.instances.corps.getData(),
       date_amend: $("#date_amend").val(),
-      id_txt: myselectTexte,
-      id_art: myselectArticle,
+      id_txt: myselectTexte.options[myselectTexte.selectedIndex].value,
+      id_art: myselectArticle.options[myselectArticle.selectedIndex].value,
     };
 
     var filterDataRequest = $.ajax({

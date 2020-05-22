@@ -1,6 +1,3 @@
-/* Variables */
-var myselectTexte;
-
 function hdModalRetour() {
   $("#ModalRetour").modal("hide");
 }
@@ -9,14 +6,15 @@ $(document).ready(function () {
   CKEDITOR.replace("corps");
 
   $("#createarticle").submit(function (e) {
-    myselectTexte = document.getElementById("liste_txt");
     e.preventDefault();
+
+    var myselectTexte = document.getElementById("liste_txt");
     var $url = "./ajax/valide_create_article.php";
 
     var formData = {
       titre: $("#h3").val(),
       corps: CKEDITOR.instances.corps.getData(),
-      id_txt: myselectTexte,
+      id_txt: myselectTexte.options[myselectTexte.selectedIndex].value,
     };
 
     var filterDataRequest = $.ajax({

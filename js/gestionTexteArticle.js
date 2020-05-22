@@ -1,7 +1,7 @@
 function js_change_texte() {
   var myselect = document.getElementById("liste_txt");
 
-  $("#liste_txt").empty(); //vide la combo box
+  //$("#liste_art").empty(); //vide la combo box
   $.ajax({
     type: "POST",
     url: "ajax/recherche_article.php",
@@ -17,11 +17,10 @@ function js_change_texte() {
           "<option value=" + value + ">" + index + "</option>"
         );
       });
-      $("#liste_ville").focus();
+      $("#liste_art").focus();
     },
     error: function (jqXHR, textStatus) {
       // traitement des erreurs ajax
-      liste_ville.style.visibility = "hidden";
       if (jqXHR.status === 0) {
         alert("Not connect.n Verify Network.");
       } else if (jqXHR.status == 404) {

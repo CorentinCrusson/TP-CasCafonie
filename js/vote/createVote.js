@@ -3,15 +3,30 @@ function hdModalRetour() {
 }
 
 $(document).ready(function () {
+  $.datepicker.setDefaults($.datepicker.regional["fr"]);
+
+  $("#jour_vote").datepicker(
+    { changeYear: true, dateFormat: "yy-mm-dd" },
+    "setDate",
+    $("#jour_vote").val()
+  );
+
   $("#createvote").submit(function (e) {
     e.preventDefault();
+
+    var myselectTexte = document.getElementById("liste_txt");
+    var myselectArticle = document.getElementById("liste_art");
+    var myselectOrgane = document.getElementById("liste_org");
+
     var $url = "./ajax/valide_create_vote.php";
 
     var formData = {
-      titre: $("#h3").val(),
-      date_deb: $("#date_deb").val(),
-      date_fin: $("#date_fin").val(),
-      corps: CKEDITOR.instances.corps.getData(),
+      jour_vote: $("#jour_vote").val(),
+      nbr_voix_pour: $("#nbr_voix_pour").val(),
+      nbr_voix_contre: $("#nbr_voix_contre").val(),
+      id_txt: myselectTexte.options[myselectTexte.selectedIndex].value,
+      id_art: myselectArticle.options[myselectArticle.selectedIndex].value,
+      id_org: myselectOrgane.options[myselectOrgane.selectedIndex].value,
     };
 
     var filterDataRequest = $.ajax({

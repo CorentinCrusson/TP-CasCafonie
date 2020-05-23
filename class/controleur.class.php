@@ -356,7 +356,7 @@ class controleur {
 							<span class="fas fa-edit"></span>
 							</button> </td>
 							<td style="text-align: center;"><button type="button" class="btn btn-danger btn-default pull-center"
-							value="Modifier" onclick="suppr_vote('.$row->code_txt.');">
+							value="Modifier" onclick="suppr_vote('.$row->code_txt.','.$row->code_seq_art.','.$row->code_organe.','.$row->jour_vote.');">
 							<span class="fas fa-trash"></span>
 							</button> </td>
 

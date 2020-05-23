@@ -128,7 +128,7 @@ function suppr_amendement(id) {
     alert("Cet amendement a été supprimé");
     $.ajax({
       type: "POST",
-      url: "ajax/texteLoi/supprime_amendement.php",
+      url: "ajax/amendement/supprime_amendement.php",
       dataType: "json",
       encode: true,
       data: "id_article=" + id, // on envoie via post l’id

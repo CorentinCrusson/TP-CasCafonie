@@ -87,7 +87,7 @@ $(document).ready(function () {
   });
 });
 
-function modif_article(id) {
+function modif_vote(id) {
   $.ajax({
     type: "POST",
     url: "ajax/recherche_info_article.php",
@@ -122,4 +122,38 @@ function modif_article(id) {
       }
     },
   });
+}
+
+function suppr_vote(id1, id2, id3, id4) {
+  if (confirm("Voulez-vous supprimer ce Vote ?")) {
+    alert("Ce vote a été supprimé");
+    $.ajax({
+      type: "POST",
+      url: "ajax/vote/supprime_vote.php",
+      dataType: "json",
+      encode: true,
+      data: "id_texte=" + id, // on envoie via post l’id
+      success: function (retour) {
+        document.location.reload(true);
+      },
+      error: function (jqXHR, textStatus) {
+        // traitement des erreurs ajax
+        if (jqXHR.status === 0) {
+          alert("Not connect.n Verify Network.");
+        } else if (jqXHR.status == 404) {
+          alert("Requested page not found. [404]");
+        } else if (jqXHR.status == 500) {
+          alert("Internal Server Error [500].");
+        } else if (textStatus === "parsererror") {
+          alert("Requested JSON parse failed.");
+        } else if (textStatus === "timeout") {
+          alert("Time out error.");
+        } else if (textStatus === "abort") {
+          alert("Ajax request aborted.");
+        } else {
+          alert("Uncaught Error.n" + jqXHR.responseText);
+        }
+      },
+    });
+  }
 }

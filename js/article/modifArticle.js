@@ -118,7 +118,7 @@ function suppr_article(id) {
     alert("Cet article a été supprimé");
     $.ajax({
       type: "POST",
-      url: "ajax/texteLoi/supprime_article.php",
+      url: "ajax/article/supprime_article.php",
       dataType: "json",
       encode: true,
       data: "id_article=" + id, // on envoie via post l’id

@@ -409,11 +409,34 @@ class mypdo extends PDO{
     		$data['message'] = 'Modification article ok!';
     	}
     	return $data;
-    }
+	}
+	
+	public function suppr_vote($tab)
+	{
+		$errors         = array();
+	    $data 			= array();
+	  
+        $requete='DELETE FROM VOTE WHERE code_txt = '.$tab['code_txt'].' AND code_seq_art ='.$tab['code_art'].' AND code_organe ='.$tab['code_organe'].' AND jour_vote = '.$tab['jour_vote'];
+		$nblignes=$this->connexion -> exec($requete);
+		if ($nblignes !=1)
+		{
+			$errors['requete']='Pas de suppression de Vote :'.$requete;
+		}
+
+    	if ( ! empty($errors)) {
+    		$data['success'] = false;
+    		$data['errors']  = $errors;
+    	} else {
+
+    		$data['success'] = true;
+    		$data['message'] = 'Suppression Vote ok!';
+    	}
+    	return $data;
+	}
 
 	public function liste_votes()
 	{
-		$requete='SELECT t.titre_txt,a.titre_art,v.jour_vote,o.lib_organe,v.nbr_voix_pour,v.nbr_voix_contre FROM voter v, texte t, article a,organes o
+		$requete='SELECT t.code_txt,t.titre_txt,a.code_seq_art, a.titre_art,v.jour_vote,o.code_organe,o.lib_organe,v.nbr_voix_pour,v.nbr_voix_contre FROM voter v, texte t, article a,organes o
 		WHERE t.code_txt = v.code_txt AND a.code_seq_art = v.code_seq_art AND o.code_organe = v.code_organe';
 
       	$result=$this->connexion->query($requete);

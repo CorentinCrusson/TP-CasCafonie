@@ -125,8 +125,8 @@ class controleur {
 						<h3 class="card-title">'.$row->titre_txt.'</h3> 
 						<div id="summary">
 							'.$corps.'
-							<button onclick="afficheTexte('.$row->code_txt.')">Lire plus</button>
-							</div>
+						</div>
+						<button class="btn btn-light" type="button" onclick="afficheTexte('.$row->code_txt.')"> Voir le Texte</button>
 						<p class="card-text"><i> '.$rowArticle->titre_art.' , État Texte : '.$row->vote_final_txt.'</i></p>
 					</article>
 				</div>
@@ -139,8 +139,9 @@ class controleur {
 
 	public function retourne_affiche_un_texte()
 	{
-		$retour='<section id="affichageTexteLoi">
-		<h3 id="titreTexte"></h3>		
+		$retour='<section id="affichageUnTexteLoi" style="display: none;">
+		<h3 id="titreTexte"></h3>		 
+		<button class="btn btn-secondary" type="button" onClick="retour()"> <- Revenir aux Textes de Loi </button>
 		<div id="articleDiv">
 		</div>';
 
@@ -194,6 +195,7 @@ class controleur {
 					<th>Titre</th>
 					<th> Voté </th>
 					<th> Promulgé </th>
+					<th>  </th>
 					<th> </th>
             	</tr>  </thead> <tbody>';
 		 $result = $this->vpdo->liste_texte_loi();
@@ -204,9 +206,14 @@ class controleur {
 							<td>'.$row->code_txt.'</td>
 							<td>'.$row->titre_txt.'</td>
 							<td>'.$row->vote_final_txt.'</td>
+							<td>'.$row->promulgation_txt.'</td>
 							<td style="text-align: center;"><button type="button" class="btn btn-primary btn-default pull-center"
 							value="Modifier" onclick="modif_texte('.$row->code_txt.');">
 							<span class="fas fa-edit"></span>
+							</button> </td>
+							<td style="text-align: center;"><button type="button" class="btn btn-danger btn-default pull-center"
+							value="Modifier" onclick="suppr_texte('.$row->code_txt.');">
+							<span class="fas fa-trash"></span>
 							</button> </td>
 							</tr>';
 					}
@@ -231,6 +238,7 @@ class controleur {
 					<th>Titre</th>				
 					<th> Titre Texte Référent </th>
 					<th> </th>
+					<th> </th>
             	</tr>  </thead> <tbody>';
 		 $result = $this->vpdo->liste_articles();
 		 if ($result != false) {
@@ -240,6 +248,14 @@ class controleur {
 							<td>'.$row->code_seq_art.'</td>
 							<td>'.$row->titre_art.'</td>
 							<td>'.$row->titre_txt.'</td>
+							<td style="text-align: center;"><button type="button" class="btn btn-primary btn-default pull-center"
+							value="Modifier" onclick="modif_article('.$row->code_seq_art.');">
+							<span class="fas fa-edit"></span>
+							</button> </td>
+							<td style="text-align: center;"><button type="button" class="btn btn-danger btn-default pull-center"
+							value="Modifier" onclick="suppr_article('.$row->code_seq_art.');">
+							<span class="fas fa-trash"></span>
+							</button> </td>
 							</tr>';
 					}
 
@@ -270,6 +286,7 @@ class controleur {
 					<th> Titre Article Référent </th>
 					<th>Date</th>
 					<th> </th>
+					<th> </th>
             	</tr>  </thead> <tbody>';
 		 $result = $this->vpdo->liste_amendements();
 		 if ($result != false) {
@@ -280,6 +297,14 @@ class controleur {
 							<td>'.$row->lib_amend.'</td>
 							<td>'.$row->titre_art.'</td>
 							<td>'.$row->date_amend.'</td>
+							<td style="text-align: center;"><button type="button" class="btn btn-primary btn-default pull-center"
+							value="Modifier" onclick="modif_amendement('.$row->code_seq_amend.');">
+							<span class="fas fa-edit"></span>
+							</button> </td>
+							<td style="text-align: center;"><button type="button" class="btn btn-danger btn-default pull-center"
+							value="Modifier" onclick="suppr_amendement('.$row->code_seq_amend.');">
+							<span class="fas fa-trash"></span>
+							</button> </td>
 
 							</tr>';
 					}
@@ -313,6 +338,7 @@ class controleur {
 					<th> Nombre Voix Pour </th>
 					<th> Nombre Voix Contre </th>
 					<th> </th>
+					<th> </th>
             	</tr>  </thead> <tbody>';
 		 $result = $this->vpdo->liste_votes();
 		 if ($result != false) {
@@ -325,6 +351,15 @@ class controleur {
 							<td>'.$row->lib_organe.'</td>
 							<td>'.$row->nbr_voix_pour.'</td>
 							<td>'.$row->nbr_voix_contre.'</td>
+							<td style="text-align: center;"><button type="button" class="btn btn-primary btn-default pull-center"
+							value="Modifier" onclick="modif_vote('.$row->code_txt.');">
+							<span class="fas fa-edit"></span>
+							</button> </td>
+							<td style="text-align: center;"><button type="button" class="btn btn-danger btn-default pull-center"
+							value="Modifier" onclick="suppr_vote('.$row->code_txt.');">
+							<span class="fas fa-trash"></span>
+							</button> </td>
+
 							</tr>';
 					}
 

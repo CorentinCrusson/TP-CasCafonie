@@ -31,6 +31,7 @@
 			$site->js='texteLoi/showTexte';
 			
 			$site->left_sidebar=$controleur->retourne_affichage_texte();
+			$site->left_sidebar=$controleur->retourne_affiche_un_texte();
 			$site->affiche();
 			break;
 		

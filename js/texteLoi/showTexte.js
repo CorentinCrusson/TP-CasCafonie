@@ -1,6 +1,5 @@
 function afficheTexte(id) {
   var sectionTxt = document.getElementById("affichageTexteLoi");
-  var sectionAutre = document.getElementById("afficheUnTexteLoi");
   sectionTxt.style.display = "none";
 
   $.ajax({
@@ -9,18 +8,23 @@ function afficheTexte(id) {
     dataType: "json",
     encode: true,
     data: "id_texte=" + id, // on envoie via post l’id
-    success: function (retour) {
-      $("#titreTexte").val(retour["titre_txt"]);
-      
-      $.each(retour, function(index, value))
-      {
-        if(index!="titre_txt")
-        {
-          $("#articleDiv").append('<div class="card bg-secondary text-white m-2" > <div class="card-body"><article> <h3 class="card-title">'+index+'</h3>')
-        }
-      }
 
-      sectionAutre.style.display = "block";
+    success: function (retour) {
+      $("#articleDiv").empty();
+      $("#affichageUnTexteLoi").css("display", "block");
+      $("#titreTexte").text(retour["titre_txt"]);
+
+      $.each(retour, function (index, value) {
+        if (index != "titre_txt") {
+          $("#articleDiv").append(
+            "<div class='card bg-secondary text-white m-2' > <div class='card-body'><article> <h3 class='card-title'>" +
+              index +
+              "</h3>" +
+              value +
+              "</article></div></div>"
+          );
+        }
+      });
     },
     error: function (jqXHR, textStatus) {
       // traitement des erreurs ajax
@@ -44,7 +48,7 @@ function afficheTexte(id) {
 }
 
 function retour() {
-  var sectionAutre = document.getElementById("afficheUnTexteLoi");
+  var sectionAutre = document.getElementById("affichageUnTexteLoi");
   var sectionTxt = document.getElementById("affichageTexteLoi");
   sectionAutre.style.display = "none";
   sectionTxt.style.display = "block";

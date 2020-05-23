@@ -120,3 +120,37 @@ function modif_texte(id) {
     },
   });
 }
+
+function suppr_texte(id) {
+  if (confirm("Voulez-vous supprimer ce Texte ?")) {
+    alert("Ce texte a été supprimé");
+    $.ajax({
+      type: "POST",
+      url: "ajax/texteLoi/supprime_texte.php",
+      dataType: "json",
+      encode: true,
+      data: "id_texte=" + id, // on envoie via post l’id
+      success: function (retour) {
+        document.location.reload(true);
+      },
+      error: function (jqXHR, textStatus) {
+        // traitement des erreurs ajax
+        if (jqXHR.status === 0) {
+          alert("Not connect.n Verify Network.");
+        } else if (jqXHR.status == 404) {
+          alert("Requested page not found. [404]");
+        } else if (jqXHR.status == 500) {
+          alert("Internal Server Error [500].");
+        } else if (textStatus === "parsererror") {
+          alert("Requested JSON parse failed.");
+        } else if (textStatus === "timeout") {
+          alert("Time out error.");
+        } else if (textStatus === "abort") {
+          alert("Ajax request aborted.");
+        } else {
+          alert("Uncaught Error.n" + jqXHR.responseText);
+        }
+      },
+    });
+  }
+}

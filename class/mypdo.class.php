@@ -149,6 +149,29 @@ class mypdo extends PDO{
 		return null;
 	}
 
+	public function suppr_texte($id)
+	{
+		$errors         = array();
+	    $data 			= array();
+	  
+        $requete='DELETE FROM TEXTE WHERE code_txt='.$id;
+		$nblignes=$this->connexion -> exec($requete);
+		if ($nblignes !=1)
+		{
+			$errors['requete']='Pas de suppression de Texte :'.$requete;
+		}
+
+    	if ( ! empty($errors)) {
+    		$data['success'] = false;
+    		$data['errors']  = $errors;
+    	} else {
+
+    		$data['success'] = true;
+    		$data['message'] = 'Suppression Texte ok!';
+    	}
+    	return $data;
+	}
+
 	/* - Articles - */	
 
 	public function create_article($tab)
@@ -179,6 +202,29 @@ class mypdo extends PDO{
         $data['message'] = 'Création article ok!';
       }
       return $data;
+	}
+
+	public function suppr_article($id)
+	{
+		$errors         = array();
+	    $data 			= array();
+	  
+        $requete='DELETE FROM ARTICLE WHERE code_seq_art = '.$id;
+		$nblignes=$this->connexion -> exec($requete);
+		if ($nblignes !=1)
+		{
+			$errors['requete']='Pas de suppression d\'Article :'.$requete;
+		}
+
+    	if ( ! empty($errors)) {
+    		$data['success'] = false;
+    		$data['errors']  = $errors;
+    	} else {
+
+    		$data['success'] = true;
+    		$data['message'] = 'Suppression Article ok!';
+    	}
+    	return $data;
 	}
 
 	public function liste_articles()
@@ -239,6 +285,29 @@ class mypdo extends PDO{
 			$data['message'] = 'Création Amendement ok!';
 		}
 		return $data;
+	}
+
+	public function suppr_amendement($id)
+	{
+		$errors         = array();
+	    $data 			= array();
+	  
+        $requete='DELETE FROM AMENDEMENT WHERE code_seq_amend = '.$id;
+		$nblignes=$this->connexion -> exec($requete);
+		if ($nblignes !=1)
+		{
+			$errors['requete']='Pas de suppression d\'Amendement :'.$requete;
+		}
+
+    	if ( ! empty($errors)) {
+    		$data['success'] = false;
+    		$data['errors']  = $errors;
+    	} else {
+
+    		$data['success'] = true;
+    		$data['message'] = 'Suppression Amendement ok!';
+    	}
+    	return $data;
 	}
 
 	public function liste_amendements() {

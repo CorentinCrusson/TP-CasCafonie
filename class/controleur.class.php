@@ -95,6 +95,89 @@ class controleur {
         return $retour;
 	}
 
+	/* ------------------------
+	------- Affichage ---------
+	--------------------------
+	*/
+
+	public function retourne_affichage_texte()
+	{
+		$retour='<section id="affichageTexteLoi">';
+		$max = 300;		
+		$nb = 0;
+		$result = $this->vpdo->liste_texte_loi_sous_forme_article();
+		if ($result != false) {
+			while ( $row = $result->fetch ( PDO::FETCH_OBJ ) )
+			// parcourir chaque ligne sélectionnée
+			{
+				
+				$resultArticle = $this->vpdo->trouve_toutes_les_articles_via_un_texte($row->code_txt);
+				$rowArticle = $resultArticle->fetch ( PDO::FETCH_OBJ );
+
+				$nb +=1;
+				$corps = $rowArticle->texte_art;
+				$corps = substr($corps,0,$max);
+
+				$retour = $retour . '
+				<div class="card bg-secondary text-white m-2" >
+				<div class="card-body">
+					<article>
+						<h3 class="card-title">'.$row->titre_txt.'</h3> 
+						<div id="summary">
+							'.$corps.'
+							<button onclick="afficheTexte('.$row->code_txt.')">Lire plus</button>
+							</div>
+						<p class="card-text"><i> '.$rowArticle->titre_art.' , État Texte : '.$row->vote_final_txt.'</i></p>
+					</article>
+				</div>
+			</div>';
+			}
+		}
+		$retour = $retour .'</section>';
+		return $retour;
+	}
+
+	public function retourne_affiche_un_texte()
+	{
+		$retour='<section id="affichageTexteLoi">
+		<h3 id="titreTexte"></h3>		
+		<div id="articleDiv">
+		</div>';
+
+		$retour = $retour .'</section>';
+		return $retour;
+	}
+
+	public function retourne_affichage_amendement()
+	{
+		$retour='<section id="affichageAmendement">';
+		$max = 300;		
+		$nb = 0;
+		$result = $this->vpdo->liste_amendements();
+		if ($result != false) {
+			while ( $row = $result->fetch ( PDO::FETCH_OBJ ) )
+			// parcourir chaque ligne sélectionnée
+			{
+				$nb +=1;
+				$corps = $row->texte_amend;
+
+				$retour = $retour . '
+				<div class="card bg-secondary text-white m-2" >
+				<div class="card-body">
+					<article>
+						<h3 class="card-title">'.$row->lib_amend.'</h3> 
+						'.$corps.'
+						<p class="card-text"><i> Écrit le '.$row->date_amend.'</i></p>
+					</article>
+				</div>
+			</div>';
+			}
+		}
+		
+		$retour = $retour .'</section>';
+		return $retour;
+	}
+
 	/*  -------------------------
 	--------- DATATABLES --------
 	--------------------------- */
@@ -121,6 +204,10 @@ class controleur {
 							<td>'.$row->code_txt.'</td>
 							<td>'.$row->titre_txt.'</td>
 							<td>'.$row->vote_final_txt.'</td>
+							<td style="text-align: center;"><button type="button" class="btn btn-primary btn-default pull-center"
+							value="Modifier" onclick="modif_texte('.$row->code_txt.');">
+							<span class="fas fa-edit"></span>
+							</button> </td>
 							</tr>';
 					}
 

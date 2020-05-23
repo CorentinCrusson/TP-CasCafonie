@@ -82,6 +82,34 @@ class mypdo extends PDO{
       }
       return $data;
 	}
+
+	public function modif_texte()
+	{
+		$errors         = array();
+		$data 			= array();
+		
+    	$requete='update texte'
+    	.'set titre_txt='.$this->connexion ->quote($tab['titre']) .','
+    	.'id_insti='.$this->connexion ->quote($tab['id_insti']) .','
+ 		.' where id='.$tab['id_txt'] .';'; 
+		$nblignes=$this->connexion -> exec($requete);
+		if ($nblignes !=1)
+		{
+			$errors['requete']='Pas de modifications de Texte :'.$requete;
+		}
+
+
+
+    	if ( ! empty($errors)) {
+    		$data['success'] = false;
+    		$data['errors']  = $errors;
+    	} else {
+
+    		$data['success'] = true;
+    		$data['message'] = 'Modification Texte ok!';
+    	}
+    	return $data;
+	}
 		
 	public function liste_texte_loi() {
 		$requete='SELECT code_txt,titre_txt,vote_final_txt,promulgation_txt FROM texte';
@@ -95,6 +123,31 @@ class mypdo extends PDO{
 		
 		 return null;
 	}	
+
+	public function liste_texte_loi_sous_forme_article() {
+		$requete='SELECT code_txt,titre_txt,vote_final_txt  FROM texte';
+
+      	$result=$this->connexion->query($requete);
+      	if ($result)
+      	{
+
+      		return $result;
+     	}
+		
+		 return null;
+	}	
+
+	public function trouve_texte_via_id($id)
+	{
+		$requete= 'SELECT * FROM texte WHERE code_txt = '.$id;
+
+		$result=$this->connexion->query($requete);
+		if ($result)
+		{
+			return ($result);
+		}
+		return null;
+	}
 
 	/* - Articles - */	
 
@@ -144,7 +197,7 @@ class mypdo extends PDO{
 
 	public function trouve_toutes_les_articles_via_un_texte($id)
 	{
-		$requete= 'SELECT code_seq_art, titre_art FROM article WHERE code_txt = '.$id;
+		$requete= 'SELECT code_seq_art, titre_art,texte_art FROM article WHERE code_txt = '.$id;
 
 		$result=$this->connexion->query($requete);
 		if ($result)
@@ -189,7 +242,7 @@ class mypdo extends PDO{
 	}
 
 	public function liste_amendements() {
-		$requete='SELECT am.code_seq_amend,am.lib_amend,am.date_amend,a.titre_art FROM amendement am,article a 
+		$requete='SELECT am.code_seq_amend,am.lib_amend,am.date_amend,a.titre_art,am.texte_amend FROM amendement am,article a 
 		WHERE am.code_seq_art = a.code_seq_art';
 
       	$result=$this->connexion->query($requete);
@@ -210,9 +263,9 @@ class mypdo extends PDO{
 		$dateOk = true;
 
 		/* -- On vérifie d'abord si la date donnée existe -- */
-		$requete = 'SELECT * from date where jour_vote='.$tab['jour_vote'];
-		$nblignes=$this->connexion->exec($requete);
-		if ($nblignes != 1)
+		$requete = 'SELECT COUNT(*) from date where jour_vote ='.$tab['jour_vote'];
+		$res=$this->connexion->query($requete);
+		if ($res->fetchColumn() != 0)
 		{	
 			/* -- Si NON on insert d'abord la date -- */
 			$requete='INSERT INTO date(jour_vote) VALUES ('
@@ -223,7 +276,7 @@ class mypdo extends PDO{
 			if ($nblignes !=1)
 			{
 				$dateOk= false;
-				$errors['requete']='Pas de insert de Date :'.$requete;
+				$errors['requete']='Pas de insert de Date :'.$requete.' Lignes : '.strval($aff);
 			}
 		}
 
@@ -258,6 +311,36 @@ class mypdo extends PDO{
 		}
 		return $data;
 	}
+
+	public function modif_vote($tab)
+	{
+		$errors         = array();
+    	$data 			= array();
+		$corps=utf8_encode($tab['corps']);
+			$requete='update vote '
+			.'set code_organe ='.$this->connexion ->quote($tab['titre']) .','
+			.'jour_vote='.$this->connexion ->quote($tab['jour_vote']) .','
+			.'code_txt='.$this->connexion ->quote($tab['code_txt']) .','
+			.'corps='.$this->connexion ->quote($corps)
+			.' where id='.$_SESSION['id_article'] .';'; 
+		$nblignes=$this->connexion -> exec($requete);
+		if ($nblignes !=1)
+		{
+			$errors['requete']='Pas de modifications de vote :'.$requete;
+		}
+
+
+
+    	if ( ! empty($errors)) {
+    		$data['success'] = false;
+    		$data['errors']  = $errors;
+    	} else {
+
+    		$data['success'] = true;
+    		$data['message'] = 'Modification article ok!';
+    	}
+    	return $data;
+    }
 
 	public function liste_votes()
 	{

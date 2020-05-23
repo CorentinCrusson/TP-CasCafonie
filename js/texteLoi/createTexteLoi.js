@@ -8,7 +8,7 @@ $(document).ready(function () {
 
     var myselectInsti = document.getElementById("liste_insti");
 
-    var $url = "./ajax/valide_create_texte.php";
+    var $url = "./ajax/texteLoi/valide_create_texte.php";
 
     var formData = {
       titre: $("#h3").val(),

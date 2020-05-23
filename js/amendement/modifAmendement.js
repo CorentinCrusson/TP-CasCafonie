@@ -6,27 +6,27 @@ function hdModalRetour() {
 
 $(document).ready(function () {
   $.datepicker.setDefaults($.datepicker.regional["fr"]);
-  $("#date_deb").datepicker(
+
+  $("#date_amend").datepicker(
     { changeYear: true, dateFormat: "yy-mm-dd" },
     "setDate",
-    $("#date_deb").val()
-  );
-  $("#date_fin").datepicker(
-    { changeYear: true, dateFormat: "yy-mm-dd" },
-    "setDate",
-    $("#date_fin").val()
+    $("#date_amend").val()
   );
   CKEDITOR.replace("corps");
 
-  $("#modifarticle").submit(function (e) {
+  $("#modifamendement").submit(function (e) {
     e.preventDefault();
-    var $url = "./ajax/valide_article.php";
+
+    var myselectTexte = document.getElementById("liste_txt");
+    var myselectArticle = document.getElementById("liste_art");
+    var $url = "./ajax/amendement/valide_amendement.php";
 
     var formData = {
       titre: $("#h3").val(),
-      date_deb: $("#date_deb").val(),
-      date_fin: $("#date_fin").val(),
       corps: CKEDITOR.instances.corps.getData(),
+      date_amend: $("#date_amend").val(),
+      id_txt: myselectTexte.options[myselectTexte.selectedIndex].value,
+      id_art: myselectArticle.options[myselectArticle.selectedIndex].value,
     };
 
     var filterDataRequest = $.ajax({

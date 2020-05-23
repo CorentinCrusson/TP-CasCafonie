@@ -28,17 +28,16 @@
 			break;
 		case 'textesloi':
 			$site->titre='Textes de Loi';
-			$site->js='texteLoi/texteLoi';
+			$site->js='texteLoi/showTexte';
 			
-			$site->left_sidebar=$controleur->retourne_textes_loi();
+			$site->left_sidebar=$controleur->retourne_affichage_texte();
 			$site->affiche();
 			break;
 		
 		case 'amendements':
 			$site->titre='Amendements';
-			$site->js='amendement/amendements';
 				
-			$site->left_sidebar=$controleur->retourne_amendements();
+			$site->left_sidebar=$controleur->retourne_affichage_amendement();
 			$site->affiche();
 			break;
 

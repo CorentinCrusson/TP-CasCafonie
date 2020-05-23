@@ -18,7 +18,7 @@ $(document).ready(function () {
     var myselectArticle = document.getElementById("liste_art");
     var myselectOrgane = document.getElementById("liste_org");
 
-    var $url = "./ajax/valide_create_vote.php";
+    var $url = "./ajax/vote/valide_create_vote.php";
 
     var formData = {
       jour_vote: $("#jour_vote").val(),

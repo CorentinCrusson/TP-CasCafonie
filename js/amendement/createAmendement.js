@@ -17,7 +17,7 @@ $(document).ready(function () {
 
     var myselectTexte = document.getElementById("liste_txt");
     var myselectArticle = document.getElementById("liste_art");
-    var $url = "./ajax/valide_create_amendement.php";
+    var $url = "./ajax/amendement/valide_create_amendement.php";
 
     var formData = {
       titre: $("#h3").val(),

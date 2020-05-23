@@ -2,7 +2,7 @@
 
 session_start();
 
-include_once('../class/autoload.php');
+include_once('../../class/autoload.php');
 
 $errors         = array();
 $data 			= array();

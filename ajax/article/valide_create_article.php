@@ -2,7 +2,7 @@
 
 session_start();
 
-include_once('../class/autoload.php');
+include_once('../../class/autoload.php');
 
 $errors         = array();
 $data 			= array();
@@ -14,10 +14,8 @@ $mypdo=new mypdo();
 
 $tab['titre']=$_POST['titre'];
 $tab['corps']=$_POST['corps'];
-$tab['date_amend']=$_POST['date_amend'];
 $tab['id_txt']=$_POST['id_txt'];
-$tab['id_art']=$_POST['id_art'];
 
-$data=$mypdo->modif_amendement($tab);
+$data=$mypdo->create_article($tab);
 echo json_encode($data);
 ?>

@@ -5,28 +5,16 @@ function hdModalRetour() {
 }
 
 $(document).ready(function () {
-  $.datepicker.setDefaults($.datepicker.regional["fr"]);
-  $("#date_deb").datepicker(
-    { changeYear: true, dateFormat: "yy-mm-dd" },
-    "setDate",
-    $("#date_deb").val()
-  );
-  $("#date_fin").datepicker(
-    { changeYear: true, dateFormat: "yy-mm-dd" },
-    "setDate",
-    $("#date_fin").val()
-  );
-  CKEDITOR.replace("corps");
-
-  $("#modifarticle").submit(function (e) {
+  $("#modiftexte").submit(function (e) {
     e.preventDefault();
-    var $url = "./ajax/valide_article.php";
+
+    var myselectInsti = document.getElementById("liste_insti");
+
+    var $url = "./ajax/texteLoi/valide_texte.php";
 
     var formData = {
       titre: $("#h3").val(),
-      date_deb: $("#date_deb").val(),
-      date_fin: $("#date_fin").val(),
-      corps: CKEDITOR.instances.corps.getData(),
+      id_insti: myselectInsti.options[myselectInsti.selectedIndex].value,
     };
 
     var filterDataRequest = $.ajax({
@@ -36,6 +24,7 @@ $(document).ready(function () {
       encode: true,
       data: formData,
     });
+
     filterDataRequest.done(function (data) {
       if (!data.success) {
         var $msg =
@@ -86,21 +75,30 @@ $(document).ready(function () {
   });
 });
 
-function modif_article(id) {
+function modif_texte(id) {
   $.ajax({
     type: "POST",
-    url: "ajax/recherche_info_article.php",
+    url: "ajax/texteLoi/recherche_info_texte.php",
     dataType: "json",
     encode: true,
-    data: "id_article=" + id, // on envoie via post l’id
+    data: "id_texte=" + id, // on envoie via post l’id
     success: function (retour) {
-      $("#modifarticle").show();
+      $("#modiftexte").show();
 
-      $("#h3").val(retour["h3"]);
-      $("#date_deb").val(retour["date_deb"]);
-      $("#date_fin").val(retour["date_fin"]);
-      $("#corps").val(retour["corps"]);
-      CKEDITOR.instances["corps"].setData(retour["corps"]);
+      $("#h3").val(retour["titre"]);
+      $("#liste_insti option[value=" + retour["code_insti"] + "]").prop(
+        "selected",
+        true
+      );
+      $("#modiftexte").append(
+        '<input type="hidden" name="code_txt" value="' + id + '"/>'
+      );
+      $([document.documentElement, document.body]).animate(
+        {
+          scrollTop: $("#modiftexte").offset().top,
+        },
+        500
+      );
     },
     error: function (jqXHR, textStatus) {
       // traitement des erreurs ajax

@@ -9,7 +9,7 @@ $(document).ready(function () {
     e.preventDefault();
 
     var myselectTexte = document.getElementById("liste_txt");
-    var $url = "./ajax/valide_create_article.php";
+    var $url = "./ajax/article/valide_create_article.php";
 
     var formData = {
       titre: $("#h3").val(),

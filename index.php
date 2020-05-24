@@ -269,8 +269,8 @@
 			
 					case 'modifiervote':
 						$site->titre='Modification Vote';
-						$site->js='vote/modifVote';
 						$site->js='vote/voteTable';
+						$site->js='vote/modifVote';
 			
 						$site->js='jquery.validate.min';
 						$site->js='messages_fr';

@@ -13,6 +13,8 @@ $(document).ready(function () {
     var formData = {
       titre: $("#h3").val(),
       id_insti: myselectInsti.options[myselectInsti.selectedIndex].value,
+      vote_final_txt: $("#liste_vote_final_txt option:selected").text(),
+      promulgation_txt: $("#liste_promulgation_txt option:selected").text(),
     };
 
     var filterDataRequest = $.ajax({

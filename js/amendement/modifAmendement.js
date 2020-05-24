@@ -27,6 +27,7 @@ $(document).ready(function () {
       date_amend: $("#date_amend").val(),
       id_txt: myselectTexte.options[myselectTexte.selectedIndex].value,
       id_art: myselectArticle.options[myselectArticle.selectedIndex].value,
+      id_amend: $("[name=code_seq_amend]").val(),
     };
 
     var filterDataRequest = $.ajax({
@@ -86,10 +87,10 @@ $(document).ready(function () {
   });
 });
 
-function modif_article(id) {
+function modif_amendement(id) {
   $.ajax({
     type: "POST",
-    url: "ajax/recherche_info_article.php",
+    url: "ajax/amendement/recherche_info_amendement.php",
     dataType: "json",
     encode: true,
     data: "id_article=" + id, // on envoie via post l’id
@@ -97,10 +98,20 @@ function modif_article(id) {
       $("#modifarticle").show();
 
       $("#h3").val(retour["h3"]);
-      $("#date_deb").val(retour["date_deb"]);
-      $("#date_fin").val(retour["date_fin"]);
+      $("#date_amend").val(retour["date_amend"]);
       $("#corps").val(retour["corps"]);
       CKEDITOR.instances["corps"].setData(retour["corps"]);
+      $("#liste_txt").val(retour["id_texte"]);
+      $("#liste_art").val(retour["id_article"]);
+      $("#modifamendement").append(
+        '<input type="hidden" name="code_seq_amend" value="' + id + '"/>'
+      );
+      $([document.documentElement, document.body]).animate(
+        {
+          scrollTop: $("#modifamendement").offset().top,
+        },
+        500
+      );
     },
     error: function (jqXHR, textStatus) {
       // traitement des erreurs ajax
@@ -131,7 +142,7 @@ function suppr_amendement(id) {
       url: "ajax/amendement/supprime_amendement.php",
       dataType: "json",
       encode: true,
-      data: "id_article=" + id, // on envoie via post l’id
+      data: "id_amend=" + id, // on envoie via post l’id
       success: function (retour) {
         document.location.reload(true);
       },

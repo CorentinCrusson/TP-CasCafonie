@@ -1,3 +1,6 @@
 $(document).ready(function () {
-  $("#amendementTable").dataTable();
+  $("#amendementTable").dataTable({
+    order: [[3, "asc"]],
+    order: [[4, "desc"]],
+  });
 });

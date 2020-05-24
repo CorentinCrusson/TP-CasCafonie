@@ -1,3 +1,5 @@
 $(document).ready(function () {
-  $("#articleTable").dataTable();
+  $("#articleTable").dataTable({
+    order: [[2, "asc"]],
+  });
 });

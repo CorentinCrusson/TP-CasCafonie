@@ -124,36 +124,44 @@ function modif_vote(id) {
   });
 }
 
-function suppr_vote(id1, id2, id3, id4) {
+function suppr_vote(id_texte, id_article, id_organe, jour_vote) {
+  var $url = "ajax/vote/supprime_vote.php";
+  var formData = {
+    id_texte: id_texte,
+    id_article: id_article,
+    id_organe: id_organe,
+    jour_vote: jour_vote,
+  };
+
   if (confirm("Voulez-vous supprimer ce Vote ?")) {
     alert("Ce vote a été supprimé");
-    $.ajax({
+    var filterDataRequest = $.ajax({
       type: "POST",
-      url: "ajax/vote/supprime_vote.php",
+      url: $url,
       dataType: "json",
       encode: true,
-      data: "id_texte=" + id, // on envoie via post l’id
-      success: function (retour) {
-        document.location.reload(true);
-      },
-      error: function (jqXHR, textStatus) {
-        // traitement des erreurs ajax
-        if (jqXHR.status === 0) {
-          alert("Not connect.n Verify Network.");
-        } else if (jqXHR.status == 404) {
-          alert("Requested page not found. [404]");
-        } else if (jqXHR.status == 500) {
-          alert("Internal Server Error [500].");
-        } else if (textStatus === "parsererror") {
-          alert("Requested JSON parse failed.");
-        } else if (textStatus === "timeout") {
-          alert("Time out error.");
-        } else if (textStatus === "abort") {
-          alert("Ajax request aborted.");
-        } else {
-          alert("Uncaught Error.n" + jqXHR.responseText);
-        }
-      },
+      data: formData,
+    });
+    filterDataRequest.done(function (data) {
+      document.location.reload(true);
+    });
+    filterDataRequest.fail(function (jqXHR, textStatus) {
+      // traitement des erreurs ajax
+      if (jqXHR.status === 0) {
+        alert("Not connect.n Verify Network.");
+      } else if (jqXHR.status == 404) {
+        alert("Requested page not found. [404]");
+      } else if (jqXHR.status == 500) {
+        alert("Internal Server Error [500].");
+      } else if (textStatus === "parsererror") {
+        alert("Requested JSON parse failed.");
+      } else if (textStatus === "timeout") {
+        alert("Time out error.");
+      } else if (textStatus === "abort") {
+        alert("Ajax request aborted.");
+      } else {
+        alert("Uncaught Error.n" + jqXHR.responseText);
+      }
     });
   }
 }

@@ -284,6 +284,7 @@ class controleur {
             		<th>Numéro Amendement</th>
 					<th> Titre</th>					
 					<th> Titre Article Référent </th>
+					<th> Titre Texte Référent </th>
 					<th>Date</th>
 					<th> </th>
 					<th> </th>
@@ -296,6 +297,7 @@ class controleur {
 							<td>'.$row->code_seq_amend.'</td>
 							<td>'.$row->lib_amend.'</td>
 							<td>'.$row->titre_art.'</td>
+							<td>'.$row->titre_txt.'</td>
 							<td>'.$row->date_amend.'</td>
 							<td style="text-align: center;"><button type="button" class="btn btn-primary btn-default pull-center"
 							value="Modifier" onclick="modif_amendement('.$row->code_seq_amend.');">
@@ -344,6 +346,7 @@ class controleur {
 		 if ($result != false) {
 			 while ( $row = $result->fetch ( PDO::FETCH_OBJ ) )
 					{
+						$jour_vote = "'".$row->jour_vote."'";
 							$retour = $retour.'<tr>
 							<td>'.$row->titre_txt.'</td>
 							<td>'.$row->titre_art.'</td>
@@ -356,7 +359,7 @@ class controleur {
 							<span class="fas fa-edit"></span>
 							</button> </td>
 							<td style="text-align: center;"><button type="button" class="btn btn-danger btn-default pull-center"
-							value="Modifier" onclick="suppr_vote('.$row->code_txt.','.$row->code_seq_art.','.$row->code_organe.','.$row->jour_vote.');">
+							value="Modifier" onclick="suppr_vote('.$row->code_txt.','.$row->code_seq_art.','.$row->code_organe.', '.$jour_vote.');">
 							<span class="fas fa-trash"></span>
 							</button> </td>
 
@@ -479,12 +482,30 @@ class controleur {
 		<form style='.$action[0].' role="form" id="'.$action[1].'" method="post"><h3>'.$action[2].'</h3>
 			<div class="form-group">
 				<label for="id"> Titre</label>
-				<input type="text" class="form-control" id="h3" name="h3" placeholder="Titre">
+				<input type="text" class="form-control" id="h3" name="h3" placeholder="Titre" required>
 			</div>
 			<div class="form-group">
 				<label for="idInsti"> Référence Institution </label>
-				<SELECT id="liste_insti">
+				<SELECT id="liste_insti" class="form-control" required>
 				'.$this->affiche_combo_insti().'
+				</SELECT>
+			</div>
+			<div class="form-group">
+				<label for="vote_final"> Vote Final ( Si le texte n\'est pas voté, ne pas remplir ) </label>
+				<SELECT id="liste_vote_final_txt" class="form-control">
+					<option value=""> Choisir Ici </option>
+					<option value="OUI" > OUI </option>
+					<option value="EN COURS" > EN COURS </option>
+					<option value="NON" > NON </option>
+				</SELECT>
+			</div>
+			<div class="form-group">
+				<label for="promulgation"> Promulgation ( Si le texte n\'est pas promulgé, ne pas remplir )</label>
+				<SELECT id="liste_promulgation_txt" class="form-control">
+				<option value=""> Choisir Ici </option>
+				<option value="ACCEPTE" > ACCEPTE </option>
+				<option value="EN COURS" > EN COURS </option>
+				<option value="REFUSE" > REFUSE </option>
 				</SELECT>
 			</div>
 
@@ -512,7 +533,7 @@ class controleur {
 			</div>
 			<div class="form-group">
 				<label for="idRef"> Référence </label>
-				<SELECT id="liste_txt" onChange="" required>
+				<SELECT id="liste_txt" class="form-control" onChange="" required>
 				'.$this->affiche_combo_texte().'
 				</SELECT>
 			</div>
@@ -545,7 +566,7 @@ class controleur {
 			</div>
 			<div class="form-group">
 				<label for="idRef"> Référence </label>
-				<SELECT id="liste_txt" onChange="js_change_texte()" required>
+				<SELECT id="liste_txt" class="form-control" onChange="js_change_texte()" required>
 				'.$this->affiche_combo_texte().'
 				</SELECT>
 				'.$this->affiche_combo_article().'
@@ -568,14 +589,14 @@ class controleur {
 			
 			<div class="form-group">
 				<label for="idRef"> Référence </label>
-				<SELECT id="liste_txt" onChange="js_change_texte()" required>
+				<SELECT id="liste_txt" class="form-control" onChange="js_change_texte()" required>
 				'.$this->affiche_combo_texte().'
 				</SELECT>
 				'.$this->affiche_combo_article().'
 			</div>
 			<div class="form-group">
 				<label for="idOrg"> Organe Votant </label>
-				<SELECT id="liste_org" required>
+				<SELECT id="liste_org" class="form-control" required>
 				'.$this->affiche_combo_organe().'
 				</SELECT>
 			</div>
@@ -625,7 +646,7 @@ class controleur {
 	/* - Combo Box Article - */
 	public function affiche_combo_article(){
 
-		$retour = '<SELECT id="liste_art" style="display: none" onChange="js_change_art()" >';
+		$retour = '<SELECT id="liste_art" class="form-control" style="display: none" onChange="js_change_art()" >';
 
 		$retour = $retour.'</SELECT>';
 		return $retour;
@@ -639,6 +660,7 @@ class controleur {
 		//Combo Box Departement
 		$result = $this->vpdo->liste_organes();
 		if ($result != false) {
+			$retour = $retour.'<option value=""> Choisir Ici</option>';
 			while ( $row = $result->fetch ( PDO::FETCH_OBJ ) )
 				 {
 						 $retour = $retour."<OPTION value='$row->code_organe'>$row->lib_organe</OPTION>";
@@ -657,6 +679,7 @@ class controleur {
 		//Combo Box Departement
 		$result = $this->vpdo->liste_institutions();
 		if ($result != false) {
+			$retour = $retour.'<option value=""> Choisir Ici</option>';
 			while ( $row = $result->fetch ( PDO::FETCH_OBJ ) )
 				 {
 						 $retour = $retour."<OPTION value='$row->code_insti'>$row->nom_insti</OPTION>";
@@ -690,6 +713,22 @@ class controleur {
 		}
 
 		echo json_encode($retour);
+	}
+
+	/* ----------------------------------
+	-------------- FORUM --------------------
+	------------------------------------- */
+
+	public function retourne_sujet_forum(){
+		$retour = '';
+
+		$retour = $retour.' <h3> Petit Easter Egg pour les Développeurs</h3>
+		<br>
+		<h5> Je n\'ai pas eu le temps de faire le forum, pour vous consoler voici une petite photo </h5>
+		<img class="border circle" src="image/photo_2.jpg" height="400"/>
+		<p> <i>Soyez gentil en remplissant mon livret </i> </p>';
+
+		return $retour;
 	}
 
 	/* - Génération de Mot de Passe - */

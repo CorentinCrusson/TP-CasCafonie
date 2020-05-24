@@ -146,7 +146,7 @@ class page_base {
 						</ul>
 					</li>
 					<li class="nav-item" > <a class="nav-link"  href="'.$this->path.'/NousConnaitre" > Nous Connaître </a></li>
-					<li class="nav-item" > <a class="nav-link"  href="'.$this->path.'/Forum" > Forum </a></li>
+					<!--<li class="nav-item" > <a class="nav-link"  href="'.$this->path.'/Forum" > Forum </a></li>-->
 				';
 	}
 	protected function affiche_menu_connexion() {

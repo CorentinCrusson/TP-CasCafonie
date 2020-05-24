@@ -17,6 +17,7 @@ $(document).ready(function () {
       titre: $("#h3").val(),
       corps: CKEDITOR.instances.corps.getData(),
       id_txt: myselectTexte.options[myselectTexte.selectedIndex].value,
+      id_article: $("[name=code_article]").val(),
     };
 
     var filterDataRequest = $.ajax({
@@ -79,18 +80,26 @@ $(document).ready(function () {
 function modif_article(id) {
   $.ajax({
     type: "POST",
-    url: "ajax/recherche_info_article.php",
+    url: "ajax/article/recherche_info_article.php",
     dataType: "json",
     encode: true,
     data: "id_article=" + id, // on envoie via post l’id
     success: function (retour) {
       $("#modifarticle").show();
 
-      $("#h3").val(retour["h3"]);
-      $("#date_deb").val(retour["date_deb"]);
-      $("#date_fin").val(retour["date_fin"]);
+      $("#h3").val(retour["titre"]);
       $("#corps").val(retour["corps"]);
       CKEDITOR.instances["corps"].setData(retour["corps"]);
+      $("#liste_txt").val(retour["id_texte"]);
+      $("#modifarticle").append(
+        '<input type="hidden" name="code_article" value="' + id + '"/>'
+      );
+      $([document.documentElement, document.body]).animate(
+        {
+          scrollTop: $("#modifarticle").offset().top,
+        },
+        500
+      );
     },
     error: function (jqXHR, textStatus) {
       // traitement des erreurs ajax

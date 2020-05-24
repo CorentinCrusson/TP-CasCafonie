@@ -13,7 +13,9 @@ if(isset($_POST['id_texte']))
 		// résultats
 		$donnees = $resultat->fetch(PDO::FETCH_OBJ);
 		$data["titre"][] = ($donnees->titre_txt);
-		$data["id_insti"][] = ($donnees->code_insti);
+		$data["code_insti"][] = ($donnees->code_insti);
+		$data["vote_final_txt"][] = ($donnees->vote_final_txt);
+		$data["promulgation_txt"][] = ($donnees->promulgation_txt);
 	}
 }
 // renvoit un tableau dynamique encodé en json

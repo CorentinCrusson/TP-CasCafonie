@@ -10,13 +10,12 @@ $(document).ready(function () {
   $("#modifarticle").submit(function (e) {
     e.preventDefault();
 
-    var myselectTexte = document.getElementById("liste_txt");
     var $url = "./ajax/article/valide_article.php";
 
     var formData = {
       titre: $("#h3").val(),
       corps: CKEDITOR.instances.corps.getData(),
-      id_txt: myselectTexte.options[myselectTexte.selectedIndex].value,
+      id_texte: $("#liste_txt option:selected").val(),
       id_article: $("[name=code_article]").val(),
     };
 
@@ -85,6 +84,12 @@ function modif_article(id) {
     encode: true,
     data: "id_article=" + id, // on envoie via post l’id
     success: function (retour) {
+      /* Anti Duplication Input Hidden */
+      $("input").each(function (index) {
+        if ($(this).is("[type=hidden]") == true) {
+          $(this).remove();
+        }
+      });
       $("#modifarticle").show();
 
       $("#h3").val(retour["titre"]);

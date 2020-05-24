@@ -9,19 +9,15 @@ $(document).ready(function () {
     e.preventDefault();
 
     var myselectInsti = document.getElementById("liste_insti");
-    var myselectVoteFinal = document.getElementById("liste_vote_final_txt");
-    var myselectPromulg = document.getElementById("liste_promulgation_txt");
 
     var $url = "./ajax/texteLoi/valide_texte.php";
 
     var formData = {
       titre: $("#h3").val(),
       id_insti: myselectInsti.options[myselectInsti.selectedIndex].value,
-      code_texte: $("[name=code_txt]").val(),
-      vote_final_txt:
-        myselectVoteFinal.options[myselectVoteFinal.selectedIndex].value,
-      promulgation_txt:
-        myselectPromulg.options[myselectPromulg.selectedIndex].value,
+      id_texte: $("[name=code_txt]").val(),
+      vote_final_txt: $("#liste_vote_final_txt option:selected").text(),
+      promulgation_txt: $("#liste_promulgation_txt option:selected").text();
     };
 
     var filterDataRequest = $.ajax({
@@ -90,6 +86,12 @@ function modif_texte(id) {
     encode: true,
     data: "id_texte=" + id, // on envoie via post l’id
     success: function (retour) {
+      /* Anti Duplication Input Hidden */
+    $("input").each(function (index) {
+      if ($(this).is("[type=hidden]") == true) {
+        $(this).remove();
+      }
+    });
       $("#modiftexte").show();
 
       $("#h3").val(retour["titre"]);

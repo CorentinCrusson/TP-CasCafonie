@@ -17,16 +17,14 @@ $(document).ready(function () {
   $("#modifamendement").submit(function (e) {
     e.preventDefault();
 
-    var myselectTexte = document.getElementById("liste_txt");
-    var myselectArticle = document.getElementById("liste_art");
     var $url = "./ajax/amendement/valide_amendement.php";
 
     var formData = {
       titre: $("#h3").val(),
       corps: CKEDITOR.instances.corps.getData(),
       date_amend: $("#date_amend").val(),
-      id_txt: myselectTexte.options[myselectTexte.selectedIndex].value,
-      id_art: myselectArticle.options[myselectArticle.selectedIndex].value,
+      id_texte: $("#liste_txt option:selected").val(),
+      id_article: $("#liste_art option:selected").val(),
       id_amend: $("[name=code_seq_amend]").val(),
     };
 
@@ -93,15 +91,37 @@ function modif_amendement(id) {
     url: "ajax/amendement/recherche_info_amendement.php",
     dataType: "json",
     encode: true,
-    data: "id_article=" + id, // on envoie via post l’id
+    data: "id_amend=" + id, // on envoie via post l’id
     success: function (retour) {
-      $("#modifarticle").show();
+      /* Anti Duplication Input Hidden */
+      $("input").each(function (index) {
+        if ($(this).is("[type=hidden]") == true) {
+          $(this).remove();
+        }
+      });
+      $("#modifamendement").show();
 
-      $("#h3").val(retour["h3"]);
+      $("#h3").val(retour["titre"]);
       $("#date_amend").val(retour["date_amend"]);
       $("#corps").val(retour["corps"]);
       CKEDITOR.instances["corps"].setData(retour["corps"]);
       $("#liste_txt").val(retour["id_texte"]);
+      $("#liste_art").fadeIn();
+      $.each(retour, function (index, value) {
+        // pour chaque noeud JSON
+        // on ajoute l option dans la liste
+        if (
+          index != "titre" &&
+          index != "corps" &&
+          index != "date_amend" &&
+          index != "id_texte" &&
+          index != "id_article"
+        ) {
+          $("#liste_art").append(
+            "<option value=" + index + ">" + value + "</option>"
+          );
+        }
+      });
       $("#liste_art").val(retour["id_article"]);
       $("#modifamendement").append(
         '<input type="hidden" name="code_seq_amend" value="' + id + '"/>'

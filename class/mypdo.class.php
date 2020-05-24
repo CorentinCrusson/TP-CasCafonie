@@ -97,7 +97,7 @@ class mypdo extends PDO{
 		.'code_insti='.$this->connexion ->quote($tab['id_insti']) .','
 		.'vote_final_txt='.$this->connexion ->quote($tab['vote_final_txt']) .','
 		.'promulgation_txt='.$this->connexion ->quote($tab['promulgation_txt'])
- 		.' where code_txt='.$tab['code_texte'] .';'; 
+ 		.' where code_txt='.$tab['id_texte'] .';'; 
 		$nblignes=$this->connexion -> exec($requete);
 		if ($nblignes !=1)
 		{
@@ -227,7 +227,7 @@ class mypdo extends PDO{
 		$nblignes=$this->connexion -> exec($requete);
 		if ($nblignes !=1)
 		{
-			$errors['requete']='Pas de modifications de Texte :'.$requete;
+			$errors['requete']='Pas de modifications de Article :'.$requete;
 		}
 
 
@@ -238,7 +238,7 @@ class mypdo extends PDO{
     	} else {
 
     		$data['success'] = true;
-    		$data['message'] = 'Modification Texte ok!';
+    		$data['message'] = 'Modification Article ok!';
     	}
     	return $data;
 	}
@@ -350,14 +350,14 @@ class mypdo extends PDO{
     	$requete='update amendement '
     	.'set lib_amend='.$this->connexion ->quote($tab['titre']) .','
 		.'texte_amend='.$this->connexion ->quote($corps) .','
-		.'texte_amend='.$this->connexion ->quote($tab['date_amend']) .','
+		.'date_amend='.$this->connexion ->quote($tab['date_amend']) .','
 		.'code_txt='.$this->connexion ->quote($tab['id_texte']) .','
-		.'code_seq_art='.$this->connexion ->quote($tab['id_article']) .','
- 		.' where code_seq_amend'.$tab['id_amend'] .';'; 
+		.'code_seq_art='.$this->connexion ->quote($tab['id_article'])
+ 		.' where code_seq_amend='.$tab['id_amend'] .';'; 
 		$nblignes=$this->connexion -> exec($requete);
 		if ($nblignes !=1)
 		{
-			$errors['requete']='Pas de modifications de Texte :'.$requete;
+			$errors['requete']='Pas de modifications de Amendement :'.$requete;
 		}
 
 
@@ -368,7 +368,7 @@ class mypdo extends PDO{
     	} else {
 
     		$data['success'] = true;
-    		$data['message'] = 'Modification Texte ok!';
+    		$data['message'] = 'Modification Amendement ok!';
     	}
     	return $data;
 	}
@@ -484,14 +484,11 @@ class mypdo extends PDO{
 	public function modif_vote($tab)
 	{
 		$errors         = array();
-    	$data 			= array();
-		$corps=utf8_encode($tab['corps']);
+		$data 			= array();
 			$requete='update voter '
-			.'set code_organe ='.$this->connexion ->quote($tab['titre']) .','
-			.'jour_vote='.$this->connexion ->quote($tab['jour_vote']) .','
-			.'code_txt='.$this->connexion ->quote($tab['code_txt']) .','
-			.'corps='.$this->connexion ->quote($corps)
-			.' where id='.$_SESSION['id_article'] .';'; 
+			.'set nbr_voix_pour='.$this->connexion ->quote($tab['nbr_voix_pour']) .','
+			.'nbr_voix_contre='.$this->connexion ->quote($tab['nbr_voix_contre'])
+			.' where code_txt = '.$tab["id_texte"].' AND code_seq_art='.$tab["id_article"].' AND code_organe='.$tab["id_organe"].' AND jour_vote = '.$this->connexion ->quote($tab['jour_vote']);
 		$nblignes=$this->connexion -> exec($requete);
 		if ($nblignes !=1)
 		{

@@ -5,30 +5,18 @@ function hdModalRetour() {
 }
 
 $(document).ready(function () {
-  $.datepicker.setDefaults($.datepicker.regional["fr"]);
-
-  $("#jour_vote").datepicker(
-    { changeYear: true, dateFormat: "yy-mm-dd" },
-    "setDate",
-    $("#jour_vote").val()
-  );
-
   $("#modifvote").submit(function (e) {
     e.preventDefault();
-
-    var myselectTexte = document.getElementById("liste_txt");
-    var myselectArticle = document.getElementById("liste_art");
-    var myselectOrgane = document.getElementById("liste_org");
 
     var $url = "./ajax/vote/valide_vote.php";
 
     var formData = {
-      jour_vote: $("#jour_vote").val(),
+      id_texte: $("[name=code_texte]").val(),
+      id_article: $("[name=code_seq_art]").val(),
+      id_organe: $("[name=code_organe]").val(),
+      jour_vote: $("[name=jour_vote]").val(),
       nbr_voix_pour: $("#nbr_voix_pour").val(),
       nbr_voix_contre: $("#nbr_voix_contre").val(),
-      id_txt: myselectTexte.options[myselectTexte.selectedIndex].value,
-      id_art: myselectArticle.options[myselectArticle.selectedIndex].value,
-      id_org: myselectOrgane.options[myselectOrgane.selectedIndex].value,
     };
     var filterDataRequest = $.ajax({
       type: "POST",
@@ -87,40 +75,74 @@ $(document).ready(function () {
   });
 });
 
-function modif_vote(id) {
-  $.ajax({
+function modif_vote(id_texte, id_article, id_organe, jour_vote) {
+  var $url = "ajax/vote/recherche_info_vote.php";
+  var formData = {
+    id_texte: id_texte,
+    id_article: id_article,
+    id_organe: id_organe,
+    jour_vote: jour_vote,
+  };
+  var filterDataRequest = $.ajax({
     type: "POST",
-    url: "ajax/recherche_info_article.php",
+    url: $url,
     dataType: "json",
     encode: true,
-    data: "id_article=" + id, // on envoie via post l’id
-    success: function (retour) {
-      $("#modifarticle").show();
-
-      $("#h3").val(retour["h3"]);
-      $("#date_deb").val(retour["date_deb"]);
-      $("#date_fin").val(retour["date_fin"]);
-      $("#corps").val(retour["corps"]);
-      CKEDITOR.instances["corps"].setData(retour["corps"]);
-    },
-    error: function (jqXHR, textStatus) {
-      // traitement des erreurs ajax
-      if (jqXHR.status === 0) {
-        alert("Not connect.n Verify Network.");
-      } else if (jqXHR.status == 404) {
-        alert("Requested page not found. [404]");
-      } else if (jqXHR.status == 500) {
-        alert("Internal Server Error [500].");
-      } else if (textStatus === "parsererror") {
-        alert("Requested JSON parse failed.");
-      } else if (textStatus === "timeout") {
-        alert("Time out error.");
-      } else if (textStatus === "abort") {
-        alert("Ajax request aborted.");
-      } else {
-        alert("Uncaught Error.n" + jqXHR.responseText);
+    data: formData,
+  });
+  filterDataRequest.done(function (retour) {
+    /* Anti Duplication Input Hidden */
+    $("input").each(function (index) {
+      if ($(this).is("[type=hidden]") == true) {
+        $(this).remove();
       }
-    },
+    });
+    $("#modifvote").show();
+
+    $("#nbr_voix_pour").val(retour["nbr_vote_pour"]);
+    $("#nbr_voix_contre").val(retour["nbr_vote_contre"]);
+
+    $("#liste_txt").removeAttr("required");
+    $("#liste_art").removeAttr("required");
+    $("#liste_txt").parent().hide();
+    $("#liste_org").removeAttr("required");
+    $("#liste_org").parent().hide();
+    $("#jour_vote").removeAttr("required");
+    $("#jour_vote").parent().hide();
+
+    //jour_vote = "'" + jour_vote + "'";
+
+    $("#modifvote").append(
+      '<input type="hidden" name="code_texte" value="' + id_texte + '"/>'
+    );
+    $("#modifvote").append(
+      '<input type="hidden" name="code_seq_art" value="' + id_article + '"/>'
+    );
+    $("#modifvote").append(
+      '<input type="hidden" name="code_organe" value="' + id_organe + '"/>'
+    );
+
+    $("#modifvote").append(
+      '<input type="hidden" name="jour_vote" value="' + jour_vote + '"/>'
+    );
+  });
+  filterDataRequest.fail(function (jqXHR, textStatus) {
+    // traitement des erreurs ajax
+    if (jqXHR.status === 0) {
+      alert("Not connect.n Verify Network.");
+    } else if (jqXHR.status == 404) {
+      alert("Requested page not found. [404]");
+    } else if (jqXHR.status == 500) {
+      alert("Internal Server Error [500].");
+    } else if (textStatus === "parsererror") {
+      alert("Requested JSON parse failed.");
+    } else if (textStatus === "timeout") {
+      alert("Time out error.");
+    } else if (textStatus === "abort") {
+      alert("Ajax request aborted.");
+    } else {
+      alert("Uncaught Error.n" + jqXHR.responseText);
+    }
   });
 }
 

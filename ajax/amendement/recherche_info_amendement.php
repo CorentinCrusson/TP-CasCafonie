@@ -16,8 +16,17 @@ if(isset($_POST['id_amend']))
 		$data["corps"][] = ($donnees->texte_amend);
 		$data["date_amend"][] = ($donnees->date_amend);
 		$data["id_texte"][] = ($donnees->code_txt);
+		$code_txt = ($donnees->code_txt);
 		$data["id_article"][] = ($donnees->code_seq_art);
 	}
+
+	$resultat = $mypdo->trouve_toutes_les_articles_via_un_texte($code_txt);
+	if(isset($resultat))
+	{
+        while($donnees = $resultat->fetch(PDO::FETCH_OBJ)) {
+            $data[$donnees->code_seq_art][] = ($donnees->titre_art);
+        }
+    }
 }
 // renvoit un tableau dynamique encodé en json
 echo json_encode($data);

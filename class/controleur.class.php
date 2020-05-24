@@ -355,7 +355,7 @@ class controleur {
 							<td>'.$row->nbr_voix_pour.'</td>
 							<td>'.$row->nbr_voix_contre.'</td>
 							<td style="text-align: center;"><button type="button" class="btn btn-primary btn-default pull-center"
-							value="Modifier" onclick="modif_vote('.$row->code_txt.');">
+							value="Modifier" onclick="modif_vote('.$row->code_txt.','.$row->code_seq_art.','.$row->code_organe.', '.$jour_vote.');">
 							<span class="fas fa-edit"></span>
 							</button> </td>
 							<td style="text-align: center;"><button type="button" class="btn btn-danger btn-default pull-center"
@@ -610,7 +610,7 @@ class controleur {
 			</div>
 			<div class="form-group">
 				<label for="dateVote"> Date du Vote </label>
-				<input type="text" class="form-control" id="jour_vote" name="jour_vote" placeholder="Date du Vote">
+				<input type="text" class="form-control" id="jour_vote" name="jour_vote" placeholder="Date du Vote" required>
 			</div>
 
 			<button type="submit" class="btn btn-success btn-default"><span class="fas fa-power-off"></span>'.$action[3].'</button>
@@ -646,7 +646,7 @@ class controleur {
 	/* - Combo Box Article - */
 	public function affiche_combo_article(){
 
-		$retour = '<SELECT id="liste_art" class="form-control" style="display: none" onChange="js_change_art()" >';
+		$retour = '<SELECT id="liste_art" class="form-control" style="display: none" onChange="js_change_art()" > <option value=""> Choisir Ici</option>';
 
 		$retour = $retour.'</SELECT>';
 		return $retour;

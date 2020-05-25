@@ -14,7 +14,7 @@ $(document).ready(function () {
       id_texte: $("[name=code_texte]").val(),
       id_article: $("[name=code_seq_art]").val(),
       id_organe: $("[name=code_organe]").val(),
-      jour_vote: $("[name=jour_vote]").val(),
+      jour_vote: $("[name=jour_vote_input]").val(),
       nbr_voix_pour: $("#nbr_voix_pour").val(),
       nbr_voix_contre: $("#nbr_voix_contre").val(),
     };
@@ -123,7 +123,7 @@ function modif_vote(id_texte, id_article, id_organe, jour_vote) {
     );
 
     $("#modifvote").append(
-      '<input type="hidden" name="jour_vote" value="' + jour_vote + '"/>'
+      '<input type="hidden" name="jour_vote_input" value="' + jour_vote + '"/>'
     );
   });
   filterDataRequest.fail(function (jqXHR, textStatus) {

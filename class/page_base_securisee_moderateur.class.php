@@ -74,6 +74,19 @@ class page_base_securisee_moderateur extends page_base {
 				<a class="nav-link"  href="'.$this->path.'/modifierVote" > Modifier un Vote <span class="sr-only">(current)</span></a></li>
 			</ul>
 		</li>
+
+		<li class="dropdown">
+			<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+				Gestion Institutions
+				<b class="caret"></b>
+			</a>
+
+
+			<ul class="dropdown-menu">
+				<a class="nav-link"  href="'.$this->path.'/proposerInstitution" > Proposer une Institution <span class="sr-only">(current)</span></a></li>
+				<a class="nav-link"  href="'.$this->path.'/modifierInstitution" > Modifier une Institution <span class="sr-only">(current)</span></a></li>
+			</ul>
+		</li>
 		';
 
 	}

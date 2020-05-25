@@ -114,8 +114,14 @@ class controleur {
 				$resultArticle = $this->vpdo->trouve_toutes_les_articles_via_un_texte($row->code_txt);
 				$rowArticle = $resultArticle->fetch ( PDO::FETCH_OBJ );
 
+				$corps = '';
+
 				$nb +=1;
-				$corps = $rowArticle->texte_art;
+				if($rowArticle!=null)
+				{
+					$corps = $rowArticle->texte_art;
+				}
+				
 				$corps = substr($corps,0,$max);
 
 				$retour = $retour . '
@@ -127,7 +133,12 @@ class controleur {
 							'.$corps.'
 						</div>
 						<button class="btn btn-light" type="button" onclick="afficheTexte('.$row->code_txt.')"> Voir le Texte</button>
-						<p class="card-text"><i> '.$rowArticle->titre_art.' , État Texte : '.$row->vote_final_txt.'</i></p>
+						<p class="card-text"><i> ';
+						if($rowArticle!=null)
+						{
+							$retour = $retour . $rowArticle->titre_art;
+						}
+						$retour = $retour .', État Texte : '.$row->vote_final_txt.'</i></p>
 					</article>
 				</div>
 			</div>';
@@ -364,6 +375,59 @@ class controleur {
 							</button> </td>
 
 							</tr>';
+					}
+
+		} else {
+			$retour. '<tr class="odd">
+			<td valign="top" colspan="3" class="dataTables_empty">
+				Aucune donnée n\'a été importée
+			</td>
+			</tr>';
+		}		
+
+		$retour = $retour.'</tbody>
+		</table>
+		</div>';
+        return $retour;
+	}
+
+	/* - DataTable Institutions - */
+
+	public function retourne_institutions() {
+		$retour = '';
+	    $retour = $retour.'<div class="table-responsive">
+	    <table id="institutionTable" class="table table-striped table-bordered" cellspacing="0" >
+            <thead>
+            	<tr>
+            		<th> Nom Institution </th>
+					<th> Type Institution </th>	
+					<th> </th>
+					<th> </th>
+            	</tr>  </thead> <tbody>';
+		 $result = $this->vpdo->liste_institutions();
+		 if ($result != false) {
+			 while ( $row = $result->fetch ( PDO::FETCH_OBJ ) )
+					{
+						$lib_type_insti = 'Aucun';
+						if($row->code_type_insti != null)
+						{							
+							$result2 = $this->vpdo->trouve_typeinstitution_via_id($row->code_type_insti);
+							$rowTypeInsti = $result2->fetch ( PDO::FETCH_OBJ );
+							$lib_type_insti = $rowTypeInsti->lib_type_insti;
+						}
+						$retour = $retour.'<tr>
+						<td>'.$row->nom_insti.'</td> 
+						<td>'.$lib_type_insti.'</td>
+						<td style="text-align: center;"><button type="button" class="btn btn-primary btn-default pull-center"
+						value="Modifier" onclick="modif_institution('.$row->code_insti.');">
+						<span class="fas fa-edit"></span>
+						</button> </td>
+						<td style="text-align: center;"><button type="button" class="btn btn-danger btn-default pull-center"
+						value="Modifier" onclick="suppr_institution('.$row->code_insti.');">
+						<span class="fas fa-trash"></span>
+						</button> </td>
+
+						</tr>';
 					}
 
 		} else {
@@ -620,6 +684,32 @@ class controleur {
 
 	}
 
+	/* - Formulaire Institution - */
+
+	public function retourne_formulaire_institution($action)
+	{
+
+		$retour=  '
+		<form style='.$action[0].' role="form" id="'.$action[1].'" method="post"><h3>'.$action[2].'</h3>
+			
+			<div class="form-group">
+			<label for="id"> Titre</label>
+				<input type="text" class="form-control" id="h3" name="h3" placeholder="Nom Institution" required>
+			</div>
+			<div class="form-group">
+				<label for="idTypeInsti"> Type Institution </label>
+				<SELECT id="liste_type_insti" class="form-control" required>
+				'.$this->affiche_combo_typeinsti().'
+				</SELECT>
+			</div>
+
+			<button type="submit" class="btn btn-success btn-default"><span class="fas fa-power-off"></span>'.$action[3].'</button>
+			<button type="button"" class="btn btn-danger btn-default pull-left" ><span class="fas fa-times"></span> Cancel</button>
+		</form>';
+		return $retour;
+
+	}
+
 	/* -------------------------------------------
 	-------------- COMBO BOX ----------------------
 	--------------------------------------------- */
@@ -681,8 +771,27 @@ class controleur {
 		if ($result != false) {
 			$retour = $retour.'<option value=""> Choisir Ici</option>';
 			while ( $row = $result->fetch ( PDO::FETCH_OBJ ) )
+				{
+					$retour = $retour."<OPTION value='$row->code_insti'>$row->nom_insti</OPTION>";
+				}
+
+		}
+		
+		return $retour;
+	}
+
+	/* - Combo Box TypeInstitution - */
+	public function affiche_combo_typeinsti(){
+
+		$retour = '';
+
+		//Combo Box Departement
+		$result = $this->vpdo->liste_typeinstitution();
+		if ($result != false) {
+			$retour = $retour.'<option value=""> Choisir Ici</option>';
+			while ( $row = $result->fetch ( PDO::FETCH_OBJ ) )
 				 {
-						 $retour = $retour."<OPTION value='$row->code_insti'>$row->nom_insti</OPTION>";
+						 $retour = $retour."<OPTION value='$row->code_type_insti'>$row->lib_type_insti</OPTION>";
 				}
 
 		}

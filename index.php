@@ -298,6 +298,128 @@
 						$site->left_sidebar=$controleur->retourne_modal_message();
 						$site->affiche();
 						break;
+					case 'proposervote':
+						$site->titre='Création Vote';
+						$site->js='vote/createVote';
+						$site->js='gestionTexteArticle';
+			
+						$site->js='jquery.validate.min';
+						$site->js='messages_fr';
+						$site->js='tooltipster.bundle.min';
+						$site->js='jquery-ui.min';
+						$site->js='datepicker-fr';
+						$site->js='jquery.dataTables.min';
+						$site->js='dataTables.bootstrap4.min';
+						$site->js='all';
+			
+						$site->css='dataTables.bootstrap4.min';
+						$site->css='jquery-ui.min';
+						$site->css='jquery-ui.theme.min';
+						$site->css='tooltipster.bundle.min';
+						$site->css='all';
+						$site->css='tooltipster-sideTip-Light.min';
+			
+						echo "<script src='js/ckeditor/ckeditor.js'></script>\n";
+			
+						$site->right_sidebar=$site->rempli_right_sidebar();
+
+						$site->left_sidebar=$controleur->retourne_formulaire_vote(['""','createvote','Création Vote','Créer']);
+						$site->left_sidebar=$controleur->retourne_modal_message();
+						$site->affiche();
+						break;
+			
+					case 'modifiervote':
+						$site->titre='Modification Vote';
+						$site->js='vote/voteTable';
+						$site->js='vote/modifVote';
+			
+						$site->js='jquery.validate.min';
+						$site->js='messages_fr';
+						$site->js='tooltipster.bundle.min';
+						$site->js='jquery-ui.min';
+						$site->js='datepicker-fr';
+						$site->js='jquery.dataTables.min';
+						$site->js='dataTables.bootstrap4.min';
+						$site->js='all';
+			
+						$site->css='dataTables.bootstrap4.min';
+						$site->css='jquery-ui.min';
+						$site->css='jquery-ui.theme.min';
+						$site->css='tooltipster.bundle.min';
+						$site->css='all';
+						$site->css='tooltipster-sideTip-Light.min';
+						$site->css='fontawesome.min';
+			
+						echo "<script src='js/ckeditor/ckeditor.js'></script>\n";
+			
+						$site->right_sidebar=$site->rempli_right_sidebar();
+						
+						$site->left_sidebar=$controleur->retourne_votes();
+						$site->left_sidebar=$controleur->retourne_formulaire_vote(['"display: none;"','modifvote','Modification Vote','Modifier']);
+						$site->left_sidebar=$controleur->retourne_modal_message();
+						$site->affiche();
+						break;
+
+					case 'proposerinstitution':
+						$site->titre='Création Institution';
+						$site->js='institution/createInstitution';
+				
+						$site->js='jquery.validate.min';
+						$site->js='messages_fr';
+						$site->js='tooltipster.bundle.min';
+						$site->js='jquery-ui.min';
+						$site->js='datepicker-fr';
+						$site->js='jquery.dataTables.min';
+						$site->js='dataTables.bootstrap4.min';
+						$site->js='all';
+				
+						$site->css='dataTables.bootstrap4.min';
+						$site->css='jquery-ui.min';
+						$site->css='jquery-ui.theme.min';
+						$site->css='tooltipster.bundle.min';
+						$site->css='all';
+						$site->css='tooltipster-sideTip-Light.min';
+				
+						echo "<script src='js/ckeditor/ckeditor.js'></script>\n";
+				
+						$site->right_sidebar=$site->rempli_right_sidebar();
+	
+						$site->left_sidebar=$controleur->retourne_formulaire_institution(['""','createinstitution','Création Institution','Créer']);
+						$site->left_sidebar=$controleur->retourne_modal_message();
+						$site->affiche();
+						break;
+				
+					case 'modifierinstitution':
+						$site->titre='Modification Institution';
+						$site->js='institution/voteTable';
+						$site->js='institution/modifInstitution';
+				
+						$site->js='jquery.validate.min';
+						$site->js='messages_fr';
+						$site->js='tooltipster.bundle.min';
+						$site->js='jquery-ui.min';
+						$site->js='datepicker-fr';
+						$site->js='jquery.dataTables.min';
+						$site->js='dataTables.bootstrap4.min';
+						$site->js='all';
+				
+						$site->css='dataTables.bootstrap4.min';
+						$site->css='jquery-ui.min';
+						$site->css='jquery-ui.theme.min';
+						$site->css='tooltipster.bundle.min';
+						$site->css='all';
+						$site->css='tooltipster-sideTip-Light.min';
+						$site->css='fontawesome.min';
+				
+						echo "<script src='js/ckeditor/ckeditor.js'></script>\n";
+				
+						$site->right_sidebar=$site->rempli_right_sidebar();
+							
+						$site->left_sidebar=$controleur->retourne_institutions();
+						$site->left_sidebar=$controleur->retourne_formulaire_institution(['"display: none;"','modifinstitution','Modification Institution','Modifier']);
+						$site->left_sidebar=$controleur->retourne_modal_message();
+						$site->affiche();
+						break;
 	
 
 		case 'vote':

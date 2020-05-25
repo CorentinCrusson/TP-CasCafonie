@@ -432,9 +432,9 @@ class mypdo extends PDO{
 		$dateOk = true;
 
 		/* -- On vérifie d'abord si la date donnée existe -- */
-		$requete = 'SELECT COUNT(*) from date where jour_vote ='.$tab['jour_vote'];
+		$requete = 'SELECT COUNT(*) from date where jour_vote ='.$this->connexion->quote($tab['jour_vote']);
 		$res=$this->connexion->query($requete);
-		if ($res->fetchColumn() != 0)
+		if ($res->fetchColumn() == 0)
 		{	
 			/* -- Si NON on insert d'abord la date -- */
 			$requete='INSERT INTO date(jour_vote) VALUES ('
@@ -445,7 +445,7 @@ class mypdo extends PDO{
 			if ($nblignes !=1)
 			{
 				$dateOk= false;
-				$errors['requete']='Pas de insert de Date :'.$requete.' Lignes : '.strval($aff);
+				$errors['requete']='Pas de insert de Date :'.$requete;
 			}
 		}
 
@@ -590,9 +590,99 @@ class mypdo extends PDO{
 	/* ----------------------------------------
 	----------------- INSTITUTION ----------------
 	-------------------------------------------- */	
+	public function create_institution($tab)
+	{
+		$errors         = array();
+		$data 			= array();
+		
+		if($tab['id_type_insti']== "")
+		{
+			$tab['id_type_insti'] = null;
+		}
+	  
+        $requete='INSERT into institution(nom_insti,code_type_insti) values('
+		.$this->connexion ->quote($tab['titre']) .','
+		.$this->connexion ->quote($tab['id_type_insti']) .'
+		);';
+
+       $nblignes=$this->connexion -> exec($requete);
+      if ($nblignes !=1)
+      {
+        $errors['requete']='Pas de insert de Institution :'.$requete;
+      }
+
+
+
+      if ( ! empty($errors)) {
+        $data['success'] = false;
+        $data['errors']  = $errors;
+      } else {
+
+        $data['success'] = true;
+        $data['message'] = 'Création Institution ok!';
+      }
+      return $data;
+	}
+
+	public function modif_institution($tab)
+	{
+		$errors         = array();
+		$data 			= array();
+
+		if($tab['id_type_insti']== "")
+		{
+			$tab['id_type_insti'] = null;
+		}
+		
+    	$requete='update institution '
+    	.'set nom_insti='.$this->connexion ->quote($tab['titre']) .','
+		.'code_type_insti='.$this->connexion ->quote($tab['id_type_insti'])
+ 		.' where code_insti='.$tab['id_insti'] .';'; 
+		$nblignes=$this->connexion -> exec($requete);
+		if ($nblignes !=1)
+		{
+			$errors['requete']='Pas de modifications de Institution :'.$requete;
+		}
+
+
+
+    	if ( ! empty($errors)) {
+    		$data['success'] = false;
+    		$data['errors']  = $errors;
+    	} else {
+
+    		$data['success'] = true;
+    		$data['message'] = 'Modification Institution ok!';
+    	}
+    	return $data;
+	}
+
+	public function suppr_institution($id)
+	{
+		$errors         = array();
+	    $data 			= array();
+	  
+        $requete='DELETE FROM Institution WHERE code_insti='.$id;
+		$nblignes=$this->connexion -> exec($requete);
+		if ($nblignes !=1)
+		{
+			$errors['requete']='Pas de suppression de Institution :'.$requete;
+		}
+
+    	if ( ! empty($errors)) {
+    		$data['success'] = false;
+    		$data['errors']  = $errors;
+    	} else {
+
+    		$data['success'] = true;
+    		$data['message'] = 'Suppression Institution ok!';
+    	}
+    	return $data;
+	}
+
 	public function liste_institutions()
 	{
-		$requete='SELECT code_insti,nom_insti FROM institution';
+		$requete='SELECT * FROM institution i';
 
       	$result=$this->connexion->query($requete);
       	if ($result)
@@ -601,6 +691,44 @@ class mypdo extends PDO{
       		return $result;
      	}
       	return null;
+	}
+
+	public function trouve_institution_via_id($id)
+	{
+		$requete= 'SELECT i.code_insti,i.nom_insti,i.code_type_insti FROM institution i WHERE i.code_insti='.$id;
+		$result=$this->connexion->query($requete);
+		if ($result)
+		{
+			return ($result);
+		}
+		return null;
+	}
+
+	/* ----------------------------------------
+	-------------- TYPE INSTITUTION ----------------
+	-------------------------------------------- */	
+	public function liste_typeinstitution()
+	{
+		$requete='SELECT * FROM typeinstitution t';
+
+      	$result=$this->connexion->query($requete);
+      	if ($result)
+      	{
+
+      		return $result;
+     	}
+      	return null;
+	}
+
+	public function trouve_typeinstitution_via_id($id)
+	{
+		$requete= 'SELECT lib_type_insti,code_type_insti FROM typeinstitution WHERE code_type_insti = '.$id;
+		$result=$this->connexion->query($requete);
+		if ($result)
+		{
+			return ($result);
+		}
+		return null;
 	}
 
 	/* -------------------------------------

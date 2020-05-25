@@ -17,7 +17,7 @@ $(document).ready(function () {
       id_insti: myselectInsti.options[myselectInsti.selectedIndex].value,
       id_texte: $("[name=code_txt]").val(),
       vote_final_txt: $("#liste_vote_final_txt option:selected").text(),
-      promulgation_txt: $("#liste_promulgation_txt option:selected").text();
+      promulgation_txt: $("#liste_promulgation_txt option:selected").text(),
     };
 
     var filterDataRequest = $.ajax({
@@ -87,11 +87,11 @@ function modif_texte(id) {
     data: "id_texte=" + id, // on envoie via post l’id
     success: function (retour) {
       /* Anti Duplication Input Hidden */
-    $("input").each(function (index) {
-      if ($(this).is("[type=hidden]") == true) {
-        $(this).remove();
-      }
-    });
+      $("input").each(function (index) {
+        if ($(this).is("[type=hidden]") == true) {
+          $(this).remove();
+        }
+      });
       $("#modiftexte").show();
 
       $("#h3").val(retour["titre"]);

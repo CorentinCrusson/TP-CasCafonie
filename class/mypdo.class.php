@@ -121,8 +121,11 @@ class mypdo extends PDO{
 	{
 		$errors         = array();
 	    $data 			= array();
-	  
-        $requete='DELETE FROM TEXTE WHERE code_txt='.$id;
+	  		
+		$requete = 'DELETE FROM AMENDEMENT WHERE code_txt='.$id;
+		$requete = $requete.'DELETE FROM VOTER WHERE code_txt='.$id;
+		$requete = $requete.'DELETE FROM ARTICLE WHERE code_txt='.$id;
+		$requete = $requete.'DELETE FROM TEXTE WHERE code_txt='.$id;
 		$nblignes=$this->connexion -> exec($requete);
 		if ($nblignes !=1)
 		{
@@ -246,9 +249,10 @@ class mypdo extends PDO{
 	public function suppr_article($id)
 	{
 		$errors         = array();
-	    $data 			= array();
-	  
-        $requete='DELETE FROM ARTICLE WHERE code_seq_art = '.$id;
+		$data 			= array();
+		$requete = 'DELETE FROM VOTER WHERE code_seq_art='.$id;
+		$requete = $requete.'DELETE FROM AMENDEMENT WHERE code_seq_art='.$id;
+		$requete = $requete.'DELETE FROM ARTICLE WHERE code_seq_art = '.$id;
 		$nblignes=$this->connexion -> exec($requete);
 		if ($nblignes !=1)
 		{

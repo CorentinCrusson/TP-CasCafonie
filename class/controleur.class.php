@@ -451,8 +451,9 @@ class controleur {
 	public function retourne_nousconnaitre() {
 		$retour='';
 		$retour = $retour.'<div class="nousConnaitre"> <h3> Nous Connaitre </h3>
-		<p> <b> L\'État de Cafonie</b> est un pays de 20 habitants et oui ça en fait du monde ! </p>
-		<img src="image/image_pays"/>
+		<p> <b> L\'État de Cafonie</b> est un pays de 108 560 habitants ! </p>
+		<p> Il est situé en Europe de l\'Est </p>
+		<img src="image/image_pays" height="400"/>
 		
 	    </div>';
         return $retour;

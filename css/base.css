@@ -1,0 +1,114 @@
+:root {
+  --couleurDeSection: #fff;
+}
+/* Extra small devices (portrait phones, less than 576px) and all if not redefine*/
+
+/* Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) {
+  .global {
+    max-width: 2048px;
+    margin: 0 auto;
+  }
+  body {
+    font-family: Verdana, "Bitstream Vera Sans", "Lucida Grande", sans-serif;
+    font-size: 13px;
+    overflow-wrap: break-word;
+    overflow-x: hidden;
+    line-height: 1.25;
+    color: black;
+    background: white;
+  }
+
+  .row {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+  .col {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+  .container-fluid {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  .sticky.is-sticky {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    z-index: 1000;
+    width: 100%;
+  }
+
+  /* Style */
+  h1,
+  h2 {
+    font-family: Georgia, "Bitstream Vera Serif", Norasi, serif;
+    font-weight: normal;
+  }
+
+  h1 {
+    font-style: italic;
+    font-size: 2.2rem;
+  }
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  /* STYLE GABARITS */
+
+  pre,
+  code {
+    font-size: 100%;
+    font-family: "Bitstream Vera Mono", "Lucida Console", "Courier New",
+      monospace;
+  }
+  pre {
+    width: 90%;
+    overflow: auto;
+    overflow-y: hidden;
+    margin: 0.75em 0;
+    padding: 12px;
+    background: #eee;
+    color: #555;
+  }
+  pre strong {
+    font-weight: normal;
+    color: black;
+  }
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+  h1 {
+    font-size: 2.8rem;
+  }
+  h2 {
+    font-size: 1.7rem;
+  }
+}
+/* Large devices (desktops, 992px and up)*/
+@media (min-width: 992px) {
+  h1 {
+    font-size: 2.8rem;
+  }
+  h2 {
+    font-size: 2rem;
+  }
+
+  /* Flex Box */
+  .right {
+    width: 25%;
+  }
+  .left {
+    width: 75%;
+  }
+}
+
+/* Extra large devices (large desktops, 1200px and up)*/
+@media (min-width: 1200px) {
+  h1 {
+    font-size: 4.5rem;
+  }
+}

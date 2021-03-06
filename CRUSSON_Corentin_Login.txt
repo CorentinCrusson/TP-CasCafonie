@@ -1,0 +1,17 @@
+Les Identifications de connexion sont :
+
+Pour la secrétaire d'état : 
+	Adresse_mail : 'cristinalorient@gmail.com'
+	Mot de pase : 'secretaire'
+
+Pour le grieffier : 
+	Adresse_mail : 'jeanmarc@gmail.com'
+	Mot de pase : 'jeanmarc'
+
+Pour l'admin : 
+	Adresse_mail : 'corentincrusson@gmail.com'
+	Mot de pase : 'admin'
+
+Pour le monarque : 
+	Adresse_mail : 'felipesix@gmail.com'
+	Mot de pase : 'lapin'
